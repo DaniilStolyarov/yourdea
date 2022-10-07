@@ -1,0 +1,48 @@
+.topic-container
+{
+    display: flex;
+    flex-direction: row;
+
+    
+    margin: 20px 40px;
+    height: calc(100% - 40px);
+}
+
+.topic-container .topic
+{
+    width: 70%;
+}
+.topic .title
+{
+    background: var(--color30);
+   
+    font-size: 24px;
+    font-weight: 600;
+    margin: 20px 0 ;
+    padding: 4px 16px;
+
+}
+.topic .description
+{
+    height: calc(100% - 98px);
+    margin: 0 0 20px 0;
+    border: 2px solid var(--color30);
+    border-radius: 0 20px 0 20px;
+
+}
+.topic .description .text
+{
+    margin: 30px;
+    overflow-y: auto;
+}
+.topic .description .text
+{
+    color: var(--color30);
+    font-weight: 500;
+    text-align: justify;
+    font-size: 16px;
+}
+.topic-container .chat
+{
+    width: 30%;
+}

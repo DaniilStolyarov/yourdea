@@ -1,0 +1,12 @@
+#sign-container
+{
+    height: 100%;
+    border: 1px solid transparent;
+}
+#sign-focus
+{
+    width: 450px;
+    height: calc(100% - 150px);
+    margin: 75px auto;
+    background-color: var(--color30);
+}

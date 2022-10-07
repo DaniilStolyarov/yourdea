@@ -10,5 +10,8 @@ const io = new Server(server);
 handleEvents(io);
 
 app.use(express.static('./front'));
-
+app.get('/topics/*', (req,res,next) =>
+{
+    res.sendFile(__dirname + '/front/index.html');
+})
 server.listen(process.env.PORT || 5000); 
