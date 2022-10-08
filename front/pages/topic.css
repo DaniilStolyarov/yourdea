@@ -10,12 +10,12 @@
 
 .topic-container .topic
 {
-    width: 70%;
+    width: 60%;
 }
 .topic .title
 {
-    background: var(--color30);
-   
+    background-image: linear-gradient(90deg, var(--color30) 40%, var(--color60) );
+    color: rgb(0, 0, 50);
     font-size: 24px;
     font-weight: 600;
     margin: 20px 0 ;
@@ -26,23 +26,112 @@
 {
     height: calc(100% - 98px);
     margin: 0 0 20px 0;
-    border: 2px solid var(--color30);
+    background: var(--slight);
     border-radius: 0 20px 0 20px;
 
 }
+
 .topic .description .text
 {
-    margin: 30px;
+    margin: 30px 40px 30px 30px;
     overflow-y: auto;
-}
-.topic .description .text
-{
-    color: var(--color30);
+    color: white;
     font-weight: 500;
-    text-align: justify;
+    text-align: left;
     font-size: 16px;
 }
 .topic-container .chat
 {
-    width: 30%;
+    margin: 20px;
+    width: 40%;
+    position: relative;
+}
+.chat .view
+{
+    background-color: var(--slight);
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+    min-height: 50%;
+    height: 90%;
+}
+
+.chat .panel
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: fit-content;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: var(--color60);
+    padding-top: 10px;
+}
+.panel .send
+{
+    background-color: var(--color60);
+    width: 0; 
+    height: 0;
+    border-top: 13px solid transparent;
+    border-left: 30px solid var(--color30);
+    border-bottom: 13px solid transparent;
+    margin: 11px auto 0; 
+    max-height: 100%;
+    cursor: pointer;
+}
+.panel .textarea
+{
+    width: 85%;
+
+    color: var(--color30);
+    background-color: var(--slight);
+    border-radius: 20px;
+    padding: 7px 13px;
+    margin: 7.5px;
+}
+.panel .textarea *
+{
+    color: var(--color30);
+}
+.view
+{
+    border-top: 1px solid transparent;
+    overflow-y: auto;
+}
+.view .message
+{
+    border-top: 1px solid transparent;
+    width: 80%;
+    height: fit-content;
+    margin: 40px auto;
+    padding: 20px 65px;
+    background-color: var(--slight);
+    cursor: pointer;
+    position: relative;
+}
+.view .message:hover
+{
+    background-color: var(--color60);
+}
+.view .avatar
+{
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background-color: var(--slight);
+    background-image: url("/images/icons/android-icon-72x72.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    left: 10px;
+}
+.view .author
+{
+    color: var(--color30);
+    font-weight: 600;
+}
+.view .content
+{
+    color: white;
 }

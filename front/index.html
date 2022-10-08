@@ -31,16 +31,10 @@
                 <div class="icon"></div> 
                 <div class="text">МыслЯ</div> 
             </a>
-            <button id="profile-trigger" onclick="showProfileMenu()" >
+            <button id="profile-trigger" onclick="document.querySelector('#profile-menu').classList.toggle('active');" >
             </button>
             <div id="profile-menu" class="">
             </div>
-            <script>
-                function showProfileMenu()
-                {
-                    document.querySelector('#profile-menu').classList.toggle("active");
-                }
-            </script>
         </div>
         <div id="main-container">
             <div class="topic-container">
@@ -51,11 +45,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="chat"></div>
+                <div class="chat">
+                    <div class="view">
+                        <div class="message">
+                            <div class="avatar"></div>
+                            <div class="author">Гомо Гомо Зек</div>
+                            <div class="content">Привет, сладкий</div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="textarea" contenteditable spellcheck="false"> </div>
+                        <button class="send"></button>
+                    </div>
+                </div>
             </div>
             <div id="sign-container">
                 <div id="sign-focus">
-                    
+                    <div class="form">
+                        <div class="input-avatar">
+                            <input type = "file" id="input-file">
+                            <label for = "input-file"></label>
+                            <footer>Загрузите аватарку</footer>
+                        </div>
+                        <div class="input-field">
+                            <input type="email" id="input-email">
+                            <label for="input-email"></label>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" id="input-pass">
+                            <label for="input-pass"></label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

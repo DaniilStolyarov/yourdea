@@ -1,4 +1,4 @@
-function togglePage(pageContainer)
+function togglePage(pageContainer, display = "block")
 {
     const mainContainer = document.querySelector("#main-container");
     const pages = mainContainer.children;
@@ -6,10 +6,9 @@ function togglePage(pageContainer)
     {
         page.style.display = "none";
     })
-    pageContainer.style.display = "block";
+    pageContainer.style.display = display;
 }
-window.onload = () =>
+document.addEventListener("DOMContentLoaded", () =>
 {
-
-    togglePage(document.querySelector('#sign-container'));
-}
+    togglePage(document.querySelector('#sign-container'))
+})

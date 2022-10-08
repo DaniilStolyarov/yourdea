@@ -1,4 +1,6 @@
-window.onload = (ev) =>
+
+window.addEventListener("DOMContentLoaded", main)
+function main()
 {
     if (location.href.includes('topics/'))
     {

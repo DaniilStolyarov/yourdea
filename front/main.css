@@ -14,8 +14,10 @@
     color: rgb(0, 0, 0);
     user-select: none;
     --color10: linear-gradient(90deg, rgb(252, 211, 61) -70%, rgb(207, 35, 255) 200%);
-    --color60: black;
-    --color30: aliceblue;
+    --color60: rgb(20, 20, 29);
+    --color30: rgb(243, 218, 92);
+    --slight: rgb(41, 42, 49);
+    overflow: hidden;
 }
 
 #navbar-container
@@ -75,13 +77,14 @@ div#profile-menu
 div#profile-menu.active
 {
     display: block;
-    background-color: var(--color30);
+    background-color: white;
     height: 400px;
     width: 300px;
     right: 0;
     top: 50px;
-    box-shadow: -1px 1px 3px var(--color30);
+    box-shadow: -1px 1px 3px white;
     border-radius: 0 0 0 20px;
+    z-index: 10;
 }
 #main-title 
 {
