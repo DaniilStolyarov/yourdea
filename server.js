@@ -4,9 +4,10 @@ const https = require('http');
 const fs = require('fs');
 const options = 
 {
-    key: fs.readFileSync('./keys/privkey1.pem', 'utf8'),
-    cert: fs.readFileSync('./keys/cert1.pem','utf8'),
-    rejectUnauthorized : false
+    key: fs.readFileSync(__dirname + '/keys/key.pem', 'utf8'),
+    ca : fs.readFileSync(__dirname + '/keys/csr.pem', 'utf8'),
+    cert: fs.readFileSync(__dirname + '/keys/cert.pem', 'utf8'),
+    rejectUnathourized : false
 }
 const server = https.createServer(options, app);
 const {Server} = require('socket.io');
@@ -42,7 +43,7 @@ app.post('/login', formidable(), async (req,res) =>
     res.send(result);
 })
 
-server.listen(80, () =>
+server.listen(3000, () =>
 {
-    console.log('listening on ' + 80);
+    console.log('listening on ' + 3000);
 }); 
