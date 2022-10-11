@@ -42,7 +42,7 @@ app.post('/login', formidable(), async (req,res) =>
     res.send(result);
 })
 
-server.listen(80, () =>
+server.listen(443, () =>
 {
-    console.log('listening on ' + 80);
+    console.log('listening on ' + 443);
 }); 
