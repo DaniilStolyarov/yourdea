@@ -52,6 +52,14 @@ async function createMessagesTable() // не используется вне э�
         MESSAGE_ID BIGSERIAL PRIMARY KEY       
     )`)
 }
+async function createConnectionsTable()
+{
+    await client.query(`create table connections
+    (
+        USER_ID BIGINT,
+        SESSION UUID UNIQUE          
+    )`)
+}
 async function initDatabase() // не используется вне этого файла
 {
     return Promise.all(
@@ -59,14 +67,15 @@ async function initDatabase() // не используется вне этого
             createUsersTable(),
             createGroupsTable(),
             createGroupMembersTable(), 
-            createMessagesTable()
+            createMessagesTable(),
+            createConnectionsTable()
         ]);
 }
 async function selectFrom(tableName) // не используется вне этого файла
 {
     return await client.query(`select * from ${tableName.toString()}`);
 }
-async function addUser()
+async function addUser({email, admin = false, password, name, phoneNum, telegram, description = "empty"})
 {
     return await client.query(`insert into users 
     (   
@@ -80,8 +89,8 @@ async function addUser()
         USER_DESCRIPTION  
     ) values
     (
-        $3::text, $2::boolean, $1::timestamp without time zone, $4::text, $5::text, $6::text, $7::text, $8::text
-    )`, [new Date (Date.now()).toLocaleString(), true, 'danstolyarov@gmail.com', '12345678Lfybbk', 'danst', '89876735381', 'Danissimo_2548', 'none'])
+        $1::text, $2::boolean, $3::timestamp without time zone, $4::text, $5::text, $6::text, $7::text, $8::text
+    )`, [email, admin, new Date (Date.now()).toLocaleString(), password, name, phoneNum, telegram, description])
 }
 async function addGroup()
 {
@@ -104,7 +113,23 @@ async function getTopicById(id)
 {
     return client.query('select * from groups where group_id = $1::bigint', [id]);
 }
+async function getUserByEmail(email)
+{
+    return client.query('select * from users where email = $1::text', [email]);
+}
+async function createConnection(user_id)
+{
+    return client.query('insert into connections (user_id, session) values($1::bigint, uuid_generate_v4())', [user_id]);
+}
+async function getAuthKey(user_id)
+{
+    return client.query('select * from connections where user_id = $1::bigint', [user_id])
+}
+async function alterConnection(session)
+{
+    return client.query('update connections set session = uuid_generate_v4() where session = $1::uuid', [session])
+}
 module.exports =
 {
-    getTopicById
+    getTopicById, getUserByEmail, addUser, createConnection, getAuthKey, alterConnection
 }

@@ -7,6 +7,9 @@ function main()
         const splitted = location.href.split('topics/')
         loadTopic(splitted[splitted.length - 1])
     }
+    document.querySelector('#sign-container form').addEventListener('submit', registerEvent)
+    document.querySelector('#login-container form').addEventListener('submit', loginEvent)
+
 }
 function loadTopic(topicID)
 {
@@ -24,4 +27,29 @@ function loadTopic(topicID)
 
     })
     window.socket.emit('topic fetch', {topicID});
+}
+async function registerEvent(event)
+{
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const result = await fetch('/register', {method : "POST", body : formData })
+    const JsonResult = await result.json();
+    if (!JsonResult.valid) 
+    {
+        alert(JsonResult.reason);
+        return;
+    }
+}
+async function loginEvent(event)
+{
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const result = await fetch('/login', {method : "POST", body : formData })
+    const JsonResult = await result.json();
+    if (!JsonResult.valid) 
+    {
+        alert(JsonResult.reason);
+        return; 
+    }
+    setCookie('authKey', JsonResult.authKey);
 }

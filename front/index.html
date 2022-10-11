@@ -19,9 +19,11 @@
         <meta name="msapplication-TileImage" content="/images/icons/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
         <script src = "/lib/socket-io/socket.io.min.js"></script>
+        <script src = "/lib/cookie-js/cookie.js"></script>
         <script>window.socket = io()</script>
         <script src = "/scripts/socket-events.js"></script>
         <script src = "/scripts/toggle-pages.js"></script>
+        <script src = "/scripts/ui.js"></script>
         <link rel="stylesheet" href="/main.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -60,23 +62,81 @@
                 </div>
             </div>
             <div id="sign-container">
-                <div id="sign-focus">
+                <form id="sign-focus">
                     <div class="form">
-                        <div class="input-avatar">
-                            <input type = "file" id="input-file">
-                            <label for = "input-file"></label>
-                            <footer>Загрузите аватарку</footer>
-                        </div>
-                        <div class="input-field">
-                            <input type="email" id="input-email">
-                            <label for="input-email"></label>
-                        </div>
-                        <div class="input-field">
-                            <input type="password" id="input-pass">
-                            <label for="input-pass"></label>
-                        </div>
+                        <section class="active" id="reg-section-1">
+                            <div class="input-avatar">
+                                <input type = "file" id="input-file" accept="image/*" name="avatar">
+                                <label for = "input-file" class="avatar-1"></label>
+                                <label for = "input-file" class="avatar-2">Загрузите аватарку</footer>
+                            </div>
+                            <div class="input-field">
+                                <label for="input-email">Email</label>
+                                <input type="email" id="input-email" name="email">
+                            </div>
+                            <div class="input-field">
+                                <label for="input-name">Ваше имя</label>
+                                <input type="text" id="input-name" name="name">
+                            </div>
+                            <button type="button" class="input-submit" onclick="toggleSection(document.querySelector('#reg-section-2'))">Далее</button>
+                        </section>
+                        <section class="active" id="reg-section-2">
+                            <div class="avatar-preview">
+                            </div>
+                            <div class="input-field">
+                                <label for="input-pass">Пароль (лат. буквы, цифры, 8 знаков)</label>
+                                <input type="password" id="input-pass" name="password">
+                            </div>
+                            <div class="input-field">
+                                <label for="input-confirm-pass">Повторите пароль</label>
+                                <input type="password" id="input-confirm-pass" name="password-confirm">
+                            </div>
+                            <button type="button" class="input-submit" onclick="toggleSection(document.querySelector('#reg-section-3'))">Далее</button>
+                            <button type="button" class="input-prev" onclick="toggleSection(document.querySelector('#reg-section-1'))"></button>
+                        </section>
+                        <section class="active" id="reg-section-3">
+                            <div class="avatar-preview">
+                            </div>
+                            <div class="input-field">
+                                <label for="input-telegram">Telegram (можно оставить пустым)</label>
+                                <input type="text" id="input-telegram" name="telegram">
+                            </div>
+                            <div class="input-field">
+                                <label for="input-phone" >Номер телефона (можно оставить пустым)</label>
+                                <input type="tel" id="input-phone" name="phone">
+                            </div>
+                            <button class="input-submit" id="reg-submit">Далее</button>
+                            <button type="button" class="input-prev" onclick="toggleSection(document.querySelector('#reg-section-2'))"></button>
+                        </section>
+                        <script>
+                            function toggleSection(section)
+                            {
+                                [...document.querySelectorAll('#sign-focus section')].forEach(sect =>
+                                {
+                                    sect.classList.remove("active");
+                                })
+                                section.classList.add("active");
+                            }
+                        </script>
                     </div>
-                </div>
+                </form>
+            </div>
+            <div id="login-container">
+                <form id="login-focus">
+                    <div class="form">
+                        <div class="avatar-preview">
+                        </div>
+                        <div class="input-field">
+                            <label for="input-log-email">Email</label>
+                            <input type="email" id="input-log-email" name="email">
+                        </div>
+                        <div class="input-field">
+                            <label for="input-log-pass">Пароль</label>
+                            <input type="password" id="input-log-pass" name="password">
+                        </div>
+                        <button class="input-submit" id="log-submit">Далее</button>
+                    </div>
+                </form>
             </div>
         </div>
     </body>

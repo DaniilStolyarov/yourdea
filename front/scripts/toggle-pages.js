@@ -1,3 +1,4 @@
+// смена отображаемых страниц в зависимости от введённого url
 function togglePage(pageContainer, display = "block")
 {
     const mainContainer = document.querySelector("#main-container");
@@ -10,5 +11,16 @@ function togglePage(pageContainer, display = "block")
 }
 document.addEventListener("DOMContentLoaded", () =>
 {
-    togglePage(document.querySelector('#sign-container'))
+    switch (location.pathname)
+    {
+        case '/register':
+            togglePage(document.querySelector('#sign-container'));
+            break;
+        case '/login':
+            togglePage(document.querySelector('#login-container'));
+            break;
+        default:
+            togglePage(document.querySelector('.topic-container'), "flex");
+            break;
+    }
 })
