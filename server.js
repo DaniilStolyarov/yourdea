@@ -36,4 +36,7 @@ app.post('/login', formidable(), async (req,res) =>
     res.send(result);
 })
 
-server.listen(process.env.PORT || 5000); 
+server.listen(process.env.PORT || 80, () =>
+{
+    console.log('listening on ' + 80);
+}); 
