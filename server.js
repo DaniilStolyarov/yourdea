@@ -4,8 +4,8 @@ const https = require('http');
 const fs = require('fs');
 const options = 
 {
-    key: fs.readFileSync('./yourdea.ga/key.pem', 'utf8'),
-    cert: fs.readFileSync('./yourdea.ga/cert.pem','utf8'),
+    key: fs.readFileSync('./keys/privkey1.pem', 'utf8'),
+    cert: fs.readFileSync('./keys/cert1.pem','utf8'),
     rejectUnauthorized : false
 }
 const server = https.createServer(options, app);
