@@ -1,7 +1,13 @@
 const express = require('express');
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
+const https = require('http');
+const fs = require('fs');
+const options = 
+{
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+}
+const server = https.createServer(options, app);
 const {Server} = require('socket.io');
 const handleEvents = require('./backend/socket-events/main')
 const formidable = require('express-formidable');
