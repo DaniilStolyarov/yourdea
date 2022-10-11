@@ -18,7 +18,7 @@ const {validRegister, validLogin} = require("./backend/validation");
 const db = require('./db');
 handleEvents(io);
 app.use(express.static('./front'));
-app.get('/', (req,res,next) =>
+app.get('*', (req,res,next) =>
 {
     res.sendFile(__dirname + '/front/index.html');
 })
