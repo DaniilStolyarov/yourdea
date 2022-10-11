@@ -4,9 +4,8 @@ const https = require('http');
 const fs = require('fs');
 const options = 
 {
-    key: fs.readFileSync(__dirname + '/keys/key.pem', 'utf8'),
-    ca : fs.readFileSync(__dirname + '/keys/csr.pem', 'utf8'),
-    cert: fs.readFileSync(__dirname + '/keys/cert.pem', 'utf8'),
+    key: fs.readFileSync(__dirname + '/yourdea.ga/privkey1.pem'),
+    cert: fs.readFileSync(__dirname + '/yourdea.ga/cert1.pem'),
     rejectUnathourized : false
 }
 const server = https.createServer(options, app);
@@ -18,7 +17,7 @@ const {validRegister, validLogin} = require("./backend/validation");
 const db = require('./db');
 handleEvents(io);
 app.use(express.static('./front'));
-app.get('*', (req,res,next) =>
+app.get('/', (req,res,next) =>
 {
     res.sendFile(__dirname + '/front/index.html');
 })
