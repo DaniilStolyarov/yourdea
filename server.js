@@ -43,7 +43,7 @@ app.post('/login', formidable(), async (req,res) =>
     res.send(result);
 })
 
-server.listen(3000, () =>
+server.listen(80, () =>
 {
-    console.log('listening on ' + 3000);
+    console.log('listening on ' + 80);
 }); 
