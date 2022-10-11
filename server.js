@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const options = 
 {
@@ -46,3 +47,9 @@ server.listen(443, () =>
 {
     console.log('listening on ' + 443);
 }); 
+let legacy_server = http.createServer((req, res) =>
+{
+    res.writeHead(301, {Location : `https://${req.headers.host}`});
+    res.end();
+})
+legacy_server.listen(80);
