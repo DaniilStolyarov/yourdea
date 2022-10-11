@@ -5,7 +5,7 @@ const fs = require('fs');
 const options = 
 {
     key: fs.readFileSync(__dirname + '/yourdea.ga/privkey1.pem'),
-    cert: fs.readFileSync(__dirname + '/yourdea.ga/cert1.pem'),
+    cert: fs.readFileSync(__dirname + '/yourdea.ga/fullchain1.pem'),
     rejectUnathourized : false
 }
 const server = https.createServer(options, app);
