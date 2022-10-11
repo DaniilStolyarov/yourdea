@@ -4,8 +4,9 @@ const https = require('http');
 const fs = require('fs');
 const options = 
 {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem')
+    key: fs.readFileSync('./key.pem', 'utf8'),
+    cert: fs.readFileSync('./cert.pem','utf8'),
+    rejectUnauthorized : false
 }
 const server = https.createServer(options, app);
 const {Server} = require('socket.io');
@@ -14,7 +15,6 @@ const formidable = require('express-formidable');
 const io = new Server(server);
 const {validRegister, validLogin} = require("./backend/validation");
 const db = require('./db');
-
 handleEvents(io);
 app.use(express.static('./front'));
 app.get('*', (req,res,next) =>
@@ -42,7 +42,7 @@ app.post('/login', formidable(), async (req,res) =>
     res.send(result);
 })
 
-server.listen(process.env.PORT || 80, () =>
+server.listen(80, () =>
 {
     console.log('listening on ' + 80);
 }); 
