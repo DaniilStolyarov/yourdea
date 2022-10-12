@@ -13,16 +13,16 @@
     text-decoration: none;
     color: rgb(0, 0, 0);
     user-select: none;
-    --color10: linear-gradient(90deg, rgb(252, 211, 61) -70%, rgb(207, 35, 255) 200%);
-    --color60: rgb(20, 20, 29);
+    --color60: rgb(14, 14, 23);
     --color30: rgb(243, 218, 92);
-    --slight: rgb(41, 42, 49);
+    --color10:white;
+    --slight: rgb(26, 28, 36);
     overflow: hidden;
 }
 
 #navbar-container
 {
-    background: var(--color10);
+    background: var(--slight);
     height: 50px;
     display: flex;
     flex-direction: row;
@@ -33,13 +33,13 @@
 button#profile-trigger
 {
     display: block;
-    width: 50px;
-    height: 100%;
-    margin: 0 10px;
+    width: 40px;
+    height: 40px;
+    margin: 5px 10px;
     cursor: pointer;
     border-radius: 999px;
     position: relative;
-    background:white;
+    background: var(--color60);
     overflow: hidden;
 }
 button#profile-trigger::before
@@ -48,7 +48,7 @@ button#profile-trigger::before
     content: "";    
     width: 45%;
     height: 45%;
-    background-image: var(--color10);
+    background-color: var(--color30);
     top: 8px;
     left: calc(50% - 45%/2);
     border-radius: 999px;
@@ -59,7 +59,7 @@ button#profile-trigger::after
     content: "";
     width: 75%;
     height: 75%;
-    background-image: var(--color10);
+    background-color: var(--color30);
     top: 65%;
     left: calc(50% - 75%/2);
     border-radius: 999px;
@@ -105,9 +105,10 @@ div#profile-menu.active
 }
 #main-title div.text
 {
-    font-size: 24px;
-    margin: 10px 3px;
+    font-size: 20px;
+    margin: 13px 3px;
     font-weight: 600;
+    color: white;
 }
 #main-container
 {

@@ -11,6 +11,7 @@ function togglePage(pageContainer, display = "block")
 }
 document.addEventListener("DOMContentLoaded", () =>
 {
+    const topicDisplay = document.querySelector('.topic-container').style.display;
     switch (location.pathname)
     {
         case '/register':
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () =>
             togglePage(document.querySelector('#login-container'));
             break;
         default:
-            togglePage(document.querySelector('.topic-container'), "flex");
+            togglePage(document.querySelector('.topic-container'), topicDisplay);
             break;
     }
 })
