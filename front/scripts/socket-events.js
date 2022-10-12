@@ -52,4 +52,5 @@ async function loginEvent(event)
         return; 
     }
     setCookie('authKey', JsonResult.authKey);
+    alert("Успешно выполнен вход. Ваш ключ: " + JsonResult.authKey);
 }
