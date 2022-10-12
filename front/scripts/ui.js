@@ -1,6 +1,9 @@
 window.addEventListener("DOMContentLoaded", main)
 function main()
 {
+    const body = document.querySelector('body');
+    const initHeight = body.clientHeight;
+    body.style.minHeight = initHeight + "px";
     document.querySelector('#input-file').addEventListener('change', async (event) =>
     {
         const image = event.target.files[0];
