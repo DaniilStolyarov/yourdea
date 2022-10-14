@@ -14,7 +14,7 @@
     color: rgb(0, 0, 0);
     user-select: none;
     --color60: rgb(14, 14, 23);
-    --color30: rgb(243, 218, 92);
+    --color30: rgb(255, 196, 0);
     --color10:white;
     --slight: rgb(26, 28, 36);
     overflow: hidden;
@@ -33,7 +33,7 @@ html, body
 
     overflow-y: visible;
 }
-button#profile-trigger
+button#profile-trigger.active
 {
     display: block;
     width: 40px;
@@ -44,6 +44,10 @@ button#profile-trigger
     position: relative;
     background: var(--color60);
     overflow: hidden;
+}
+button#profile-trigger
+{
+    display: none;
 }
 button#profile-trigger::before
 {
@@ -106,12 +110,17 @@ div#profile-menu.active
 
     margin: 5px;
 }
-#main-title div.text
+#navbar-container div.text
 {
     font-size: 20px;
     margin: 13px 3px;
     font-weight: 600;
     color: white;
+}
+#login-title
+{
+    cursor: pointer;
+    margin: 0 20px 0 0;
 }
 #main-container
 {

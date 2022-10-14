@@ -11,8 +11,23 @@ function togglePage(pageContainer, display = "block")
 }
 document.addEventListener("DOMContentLoaded", () =>
 {
+    toggleMainContainer();
+    document.querySelectorAll('a').forEach(elem =>
+        {
+            elem.addEventListener('click', ev =>
+            {
+                ev.preventDefault();
+                const href = elem.href.split('/');
+                const path = href[href.length - 1];
+                toggleMainContainer('/' + path);
+            })
+        })
+})
+function toggleMainContainer(path = location.pathname)
+{
     const topicDisplay = document.querySelector('.topic-container').style.display;
-    switch (location.pathname)
+    console.log(path)
+    switch (path)
     {
         case '/register':
             togglePage(document.querySelector('#sign-container'));
@@ -21,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () =>
             togglePage(document.querySelector('#login-container'));
             break;
         default:
-            togglePage(document.querySelector('.topic-container'), topicDisplay);
+            togglePage(document.querySelector('.topic-container'), 'flex');
             break;
     }
-})
+    window.history.pushState({}, '', path)
+}

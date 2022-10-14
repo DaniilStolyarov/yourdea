@@ -26,19 +26,23 @@
         <script src = "/scripts/ui.js"></script>
         <link rel="stylesheet" href="/main.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>МыслЯ</title>
     </head>
     <body>
-        <div id="navbar-container">
+        <nav id="navbar-container">
             <a id="main-title" href="/">
                 <div class="icon"></div> 
                 <div class="text">МыслЯ</div> 
             </a>
             <button id="profile-trigger" onclick="document.querySelector('#profile-menu').classList.toggle('active');" >
             </button>
+            <a id="login-title" href="/login">
+                <div class="text">Вход</div>
+            </a>
             <div id="profile-menu" class="">
             </div>
-        </div>
-        <div id="main-container">
+        </nav>
+        <main id="main-container">
             <div class="topic-container">
                 <div class="topic">
                     <div class="title">Lorem Ipsum</div>
@@ -134,10 +138,12 @@
                             <label for="input-log-pass">Пароль</label>
                             <input type="password" id="input-log-pass" name="password">
                         </div>
+                        <a href="/register" id="sign-title">Регистрация</a>
                         <button class="input-submit" id="log-submit">Далее</button>
                     </div>
                 </form>
+
             </div>
-        </div>
+        </main>
     </body>
 </html>
