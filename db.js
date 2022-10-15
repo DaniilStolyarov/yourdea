@@ -92,7 +92,7 @@ async function addUser({email, admin = false, password, name, phoneNum, telegram
         $1::text, $2::boolean, $3::timestamp without time zone, $4::text, $5::text, $6::text, $7::text, $8::text
     )`, [email, admin, new Date (Date.now()).toLocaleString(), password, name, phoneNum, telegram, description])
 }
-async function addGroup()
+async function addGroup(title, content)
 {
     return client.query(`insert into groups
     (
@@ -104,10 +104,7 @@ async function addGroup()
         $1::TIMESTAMP WITHOUT TIME ZONE,
         $2::text,
         $3::text
-    )`, [new Date (Date.now()).toLocaleString(), 'Яблоко', `Я́блоко — сочный плод яблони, который употребляется в пищу в свежем и запеченном виде, служит сырьём в кулинарии и для приготовления напитков. Наибольшее распространение получила яблоня домашняя, реже выращивают яблоню сливолистную. Размер красных, зелёных или жёлтых шаровидных плодов 5—13 см в диаметре. Происходит из Центральной Азии, где до сих пор произрастает дикорастущий предок яблони домашней — яблоня Сиверса[1]. На сегодняшний день существует множество сортов этого вида яблони, произрастающих в различных климатических условиях. По времени созревания отличают летние, осенние и зимние сорта, более поздние сорта отличаются хорошей стойкостью.
-    Русское слово яблоко возникло в результате прибавления протетического начального «j» к праслав. *ablъko; последнее образовано с помощью суффикса -ъk — от позднепраиндоевропейской основы *āblu — «яблоко» (к той же основе восходят лит. obuolỹs, латыш. ābols, англ. apple, нем. Apfel, галльск. avallo, др.‑ирл. aball[2][3]). Данная основа представляет собой регионализм северо-западных индоевропейских языков и восходит, в свою очередь, к общеиндоевропейской основе (реконструируемой как *(a)masl-[4] или как *ŝamlu-[3]). С суффиксом -onь- та же основа дала яблонь (позднейшее яблоня)[5].
-
-Латинские слова mālum «яблоко» и mālus «яблоня» также восходят к пра-и.е. *(a)masl-/*ŝamlu-[4].`])
+    )`, [new Date (Date.now()).toLocaleString(), title, content])
 }
 async function getTopicById(id)
 {
@@ -129,7 +126,12 @@ async function alterConnection(session)
 {
     return client.query('update connections set session = uuid_generate_v4() where session = $1::uuid', [session])
 }
+async function getLastGroup()
+{
+    return client.query('SELECT * FROM GROUPS ORDER BY group_id DESC LIMIT 1');
+}
+
 module.exports =
 {
-    getTopicById, getUserByEmail, addUser, createConnection, getAuthKey, alterConnection
+    getTopicById, getUserByEmail, addUser, addGroup, createConnection, getAuthKey, alterConnection, getLastGroup
 }

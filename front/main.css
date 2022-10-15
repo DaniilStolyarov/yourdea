@@ -1,7 +1,7 @@
 @import url('./pages/topic.css');
 @import url('./pages/sign.css');
+@import url('./pages/apply.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap');
-
 *
 {
     box-sizing: border-box;
@@ -10,13 +10,11 @@
     padding: 0;
     outline: none;
     border: none;
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-    user-select: none;
     --color60: rgb(14, 14, 23);
     --color30: rgb(255, 196, 0);
     --color10:white;
     --slight: rgb(26, 28, 36);
+
     overflow: hidden;
 }
 html, body

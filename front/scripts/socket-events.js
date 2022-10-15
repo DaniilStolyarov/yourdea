@@ -9,16 +9,49 @@ function main()
     }
     document.querySelector('#sign-container form').addEventListener('submit', registerEvent)
     document.querySelector('#login-container form').addEventListener('submit', loginEvent)
-
+    document.querySelector('#apply-container #submit-apply').addEventListener('click', topicApplyEvent)
 }
+
 function loadTopic(topicID)
 {
-    window.socket.on('topic fetch success', ({topic}) =>
+    window.socket.on('topic fetch success', async ({topic}) =>
     {
+        console.log(topic)
         if (topic)
         {
             document.querySelector('.topic-container .title').textContent = topic.name;
-            document.querySelector('.topic-container .description .text').innerHTML = topic.description;
+            document.querySelector('.topic-container .description .text').id = topic.group_id;
+            const editor = new EditorJS({
+                readOnly : true,
+                data : JSON.parse(topic.description),
+                holder : topic.group_id,
+                tools :
+                {
+                    header : {
+                        class : Header,
+                        inlineToolbar : ['link', 'bold']
+                    },
+                    list : 
+                    {
+                        class : List,
+                        inlineToolbar : true
+                    },
+                    embed :
+                    {
+                        class : Embed,
+                        inlineToolbar : false,
+                        config : 
+                        {
+                            services : 
+                            {
+                                youtube : true,
+                                coub : true
+                            }
+                        }
+                    }
+                }
+            })
+            await editor.isReady;
         }
         else
         {
@@ -53,4 +86,17 @@ async function loginEvent(event)
     }
     setCookie('authKey', JsonResult.authKey);
     alert("Успешно выполнен вход. Ваш ключ: " + JsonResult.authKey);
+}   
+async function topicApplyEvent(event)
+{
+    const socket = window.socket;
+    socket.on('successful topic apply', ({id}) =>
+    {
+        window.location.pathname = '/topics/' + id;
+    })
+    const JSONdata = await window.editor.save();
+    const topicDescription = JSON.stringify(JSONdata);
+    const topicTitle = document.querySelector('#apply-title').value
+    socket.emit('topic apply', {topicDescription, topicTitle});
+
 }

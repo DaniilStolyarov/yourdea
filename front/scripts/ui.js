@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", main)
-function main()
+async function main()
 {
     const body = document.querySelector('body');
     const initHeight = body.clientHeight;
@@ -21,5 +21,41 @@ function main()
                 if (ev.key == 'Enter') ev.preventDefault();
             })
         })
-
+    putEditorOnApplyPage();
 }
+async function putEditorOnApplyPage()
+{
+    const editor = new EditorJS
+    ({
+        holder: "apply-form",
+        placeholder : "Опишите свою идею",
+        tools :
+        {
+            header : {
+                class : Header,
+                inlineToolbar : ['link', 'bold']
+            },
+            list : 
+            {
+                class : List,
+                inlineToolbar : true
+            },
+            embed :
+            {
+                class : Embed,
+                inlineToolbar : false,
+                config : 
+                {
+                    services : 
+                    {
+                        youtube : true,
+                        coub : true
+                    }
+                }
+            }
+        },
+        toolbar : ['link, bold, italic']
+    })
+    await editor.isReady; 
+    window.editor = editor
+}   

@@ -35,6 +35,9 @@ function toggleMainContainer(path = location.pathname)
         case '/login':
             togglePage(document.querySelector('#login-container'));
             break;
+        case '/apply':
+            togglePage(document.querySelector('#apply-container'));
+            break;
         default:
             togglePage(document.querySelector('.topic-container'), 'flex');
             break;

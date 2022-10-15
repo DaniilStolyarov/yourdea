@@ -18,6 +18,10 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/images/icons/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
+        <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
         <script src = "/lib/socket-io/socket.io.min.js"></script>
         <script src = "/lib/cookie-js/cookie.js"></script>
         <script>window.socket = io()</script>
@@ -142,7 +146,11 @@
                         <button class="input-submit" id="log-submit">Далее</button>
                     </div>
                 </form>
-
+            </div>
+            <div id="apply-container">
+                <input type="text" maxlength="64" id="apply-title" placeholder="Заголовок">
+                <div id="apply-form"></div>
+                <button type="button" id="submit-apply">Oпубликовать</button>
             </div>
         </main>
     </body>
