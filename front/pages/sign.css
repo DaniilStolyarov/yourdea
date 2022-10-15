@@ -54,8 +54,10 @@
 }
 #sign-focus .input-avatar
 {
-    height: 30%;
+    height: 35%;
     margin: 5%;
+    margin-bottom: 0;
+    overflow: visible;
 }
 #sign-focus label[for = "input-file"].avatar-1
 {

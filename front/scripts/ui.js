@@ -23,6 +23,10 @@ async function main()
         })
     putEditorOnApplyPage();
 }
+function getId(input)
+{
+    console.log(input)
+}
 async function putEditorOnApplyPage()
 {
     const editor = new EditorJS
@@ -49,7 +53,13 @@ async function putEditorOnApplyPage()
                     services : 
                     {
                         youtube : true,
-                        coub : true
+                        coub : true,
+                        imgur : 
+                        {
+                            regex: /https?:\/\/(?:i\.)?imgur\.com.*\/([a-zA-Z0-9]+)(?:\.gifv)?/,
+                            embedUrl: 'https://imgur.com/<%= remote_id %>/embed',
+                            html: '<iframe allowfullscreen="true" scrolling="no" id="imgur-embed-iframe-pub-<%= remote_id %>" class="imgur-embed-iframe-pub" style="height: 500px; width: 100%; border: 1px solid #000"></iframe>'
+                        }
                     }
                 }
             }
