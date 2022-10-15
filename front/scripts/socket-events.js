@@ -16,10 +16,10 @@ function loadTopic(topicID)
 {
     window.socket.on('topic fetch success', async ({topic}) =>
     {
-        console.log(topic)
-        if (topic)
+        const title = (topic.name.length > 0 ? topic.name : "Идея, которой не нужно имя")
+        if ({topic})
         {
-            document.querySelector('.topic-container .title').textContent = topic.name;
+            document.querySelector('.topic-container .title').textContent = title;
             document.querySelector('.topic-container .description .text').id = topic.group_id;
             const editor = new EditorJS({
                 readOnly : true,

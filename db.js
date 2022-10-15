@@ -3,6 +3,7 @@ const pg = require('pg')
 const config = require('./db-config.json')
 const client = new pg.Client(config)
 client.connect();
+
 async function insertUser(user)
 {
     const {email, password, name, timestamp} = user;       
@@ -94,17 +95,24 @@ async function addUser({email, admin = false, password, name, phoneNum, telegram
 }
 async function addGroup(title, content)
 {
-    return client.query(`insert into groups
-    (
-        TIMESTAMP,
-        NAME,
-        DESCRIPTION      
-    ) values
-    (
-        $1::TIMESTAMP WITHOUT TIME ZONE,
-        $2::text,
-        $3::text
-    )`, [new Date (Date.now()).toLocaleString(), title, content])
+    try
+    {
+        return client.query(`insert into groups
+        (
+            TIMESTAMP,
+            NAME,
+            DESCRIPTION      
+        ) values
+        (
+            $1::TIMESTAMP WITHOUT TIME ZONE,
+            $2::text,
+            $3::text
+        )`, [new Date (Date.now()).toLocaleString(), title, content])
+    }
+    catch(err)
+    {
+        console.log(err)
+    }
 }
 async function getTopicById(id)
 {
