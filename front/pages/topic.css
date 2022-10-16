@@ -141,6 +141,11 @@
     margin: 0 !important;
     padding: 0 !important;
 }
+.ce-block a
+{
+    color: var(--color30);
+    font-weight: 600;
+}
 @media screen and (max-device-aspect-ratio : 21 / 18) {
 
     *
