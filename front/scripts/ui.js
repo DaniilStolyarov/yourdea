@@ -62,6 +62,18 @@ async function putEditorOnApplyPage()
                         }
                     }
                 }
+            },
+            image :
+            {
+                class : ImageTool,
+                config : 
+                {
+                    endpoints : 
+                    {
+                        byUrl : `${location.origin}/upload-image-url`,
+                        byFile : `${location.origin}/upload-image-file`
+                    }
+                }
             }
         },
         toolbar : ['link, bold, italic']

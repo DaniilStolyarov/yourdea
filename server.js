@@ -3,6 +3,7 @@ const app = express();
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const v4 = require('uuid').v4; 
 const options = 
 {
     key: fs.readFileSync(__dirname + '/yourdea.ga/privkey1.pem'),
@@ -18,12 +19,23 @@ const {validRegister, validLogin} = require("./backend/validation");
 const db = require('./db');
 handleEvents(io);
 app.use(express.static('./front'));
+
 app.get('*', (req,res,next) =>
 {
+    if (req.originalUrl.includes('/images/'))
+    {
+        return next();
+    };
     res.sendFile(__dirname + '/front/index.html');
 })
-
-
+app.get('/images/*', (req, res, next) =>
+{
+    const path = req.originalUrl.split('/images/').at(-1);
+    if (fs.existsSync('./backend/images/' + path))
+    {
+        res.sendFile(__dirname + '/backend/images/' + path)
+    }
+})
 app.post('/register', formidable(), async (req, res) =>
 {
     const {email, name, password, telegram, phone} = req.fields;
@@ -41,6 +53,35 @@ app.post('/login', formidable(), async (req,res) =>
     const {email, password} = req.fields;
     const result = await validLogin({email, password})
     res.send(result);
+})
+app.post('/upload-image-file', formidable(), async (req, res) =>
+{
+    const image = req.files.image
+    if (image.size > 12582912)
+    {
+        res.send({success : 0, reason : "файл весит более 8Мб"})
+        return;
+    }
+    if (!image) return;
+    const randomId = v4();
+    const path = [randomId.slice(0, 2), randomId.slice(2, 4), randomId + '.' + image.name.split('.').at(-1)]
+    fs.mkdirSync('./backend/images/' + path.slice(0, 2).join('/'), {recursive : true}, (err) => console.log(err))
+    fs.writeFileSync(`./backend/images/${path.join('/')}`, fs.readFileSync(image.path))
+    const answer = 
+    {
+        success : 1, 
+        file : {url : req.get('origin') + '/images/' + path.join('/')}
+    }
+    res.send(answer)
+})
+app.post('/upload-image-url', formidable(), async (req, res) =>
+{
+    const answer = 
+    {
+        success : 1,
+        file : { url : req.fields.url}
+    }
+    res.send(answer)
 })
 
 server.listen(443, () =>

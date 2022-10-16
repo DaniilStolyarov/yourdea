@@ -27,7 +27,27 @@
 html, body
 {
     height: 100%;
+    scrollbar-width: thin;
 }
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--color60);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--color30);
+    border-radius: 30px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 #navbar-container
 {
     background: var(--slight);
@@ -118,14 +138,16 @@ div#profile-menu.active
 #navbar-container div.text
 {
     font-size: 20px;
-    margin: 13px 3px;
+    margin: 13px 0 0 0;
     font-weight: 600;
     color: white;
 }
 #login-title
 {
+    display: block;
     cursor: pointer;
     margin: 0 20px 0 0;
+    height: fit-content;
 }
 #main-container
 {
@@ -133,3 +155,40 @@ div#profile-menu.active
     background-color: var(--color60);
     border-top: 1px solid black;
 }
+#nav-group
+{
+    display: flex;
+    width: fit-content;
+    height: 100%;
+    margin: 0;
+    position: relative;
+}
+#apply-nav-title
+{
+    position: relative;
+    display: block;
+    width: 80px;
+    height: 30px;
+    background-color: var(--slight);
+    border-radius: 10px;
+    border: 2px dashed var(--color30);
+    margin:  10px 14px;
+    overflow: hidden;
+}
+#apply-nav-title::before, #apply-nav-title::after
+{
+    position: absolute;
+    display: block;
+    content: '';
+    width: 5%;
+    height: 80%;
+    border-radius: 30px;
+    background-color: var(--color30);
+    left: 47.5%;
+    top: 10%;
+}
+#apply-nav-title::after
+{
+    transform: rotate(90deg);
+}
+

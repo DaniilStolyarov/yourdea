@@ -136,6 +136,10 @@
 {
     color: white;
 }
+.codex-editor__redactor
+{
+    margin: 0 !important;
+}
 @media screen and (max-device-aspect-ratio : 21 / 18) {
 
     *
@@ -170,7 +174,6 @@
         margin: 0;
         height: calc(100% - 35.5px);
         border: 1px solid transparent;
-        overflow: scroll;
     }
     #main-container .text
     {

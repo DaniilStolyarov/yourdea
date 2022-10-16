@@ -23,6 +23,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
         <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
         <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script>
         <script src = "/lib/socket-io/socket.io.min.js"></script>
         <script src = "/lib/cookie-js/cookie.js"></script>
         <script>window.socket = io()</script>
@@ -41,9 +42,13 @@
             </a>
             <button id="profile-trigger" onclick="document.querySelector('#profile-menu').classList.toggle('active');" >
             </button>
-            <a id="login-title" href="/login">
-                <div class="text">Вход</div>
-            </a>
+            <section id="nav-group">
+                <a id="apply-nav-title" href="/apply">
+                </a>
+                <a id="login-title" href="/login">
+                    <div class="text">Вход</div>
+                </a>
+            </section>
             <div id="profile-menu" class="">
             </div>
         </nav>

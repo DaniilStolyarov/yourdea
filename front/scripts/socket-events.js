@@ -54,6 +54,10 @@ function loadTopic(topicID)
                                 }
                             }
                         }
+                    },
+                    image :
+                    {
+                        class : ImageTool
                     }
                 }
             })
