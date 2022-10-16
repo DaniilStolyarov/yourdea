@@ -145,6 +145,7 @@
 {
     color: var(--color30);
     font-weight: 600;
+    text-decoration: none;
 }
 @media screen and (max-device-aspect-ratio : 21 / 18) {
 
