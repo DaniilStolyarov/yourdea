@@ -40,17 +40,16 @@
                 <div class="icon"></div> 
                 <div class="text">МыслЯ</div> 
             </a>
-            <button id="profile-trigger" onclick="document.querySelector('#profile-menu').classList.toggle('active');" >
-            </button>
             <section id="nav-group">
                 <a id="apply-nav-title" href="/apply">
                 </a>
-                <a id="login-title" href="/login">
-                    <div class="text">Вход</div>
+                <a id="login-title" class="active" href="/login">
+                    <div class="text">Вход</div>    
                 </a>
+                <button id="profile-trigger" onclick="document.querySelector('#profile-menu').classList.toggle('active');" >
+                </button>
             </section>
-            <div id="profile-menu" class="">
-            </div>
+            <div id="profile-menu" class=""></div>
         </nav>
         <main id="main-container">
             <div class="topic-container">

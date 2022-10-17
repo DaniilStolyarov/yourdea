@@ -1,7 +1,16 @@
-
 window.addEventListener("DOMContentLoaded", main)
-function main()
+async function main()
 {
+    const userPromise = fetchUser()
+        .catch(reason =>
+        {
+            console.log(reason);
+            deleteCookie('authKey');
+            location.replace(location.origin)
+        })
+    const user = await userPromise;
+    if (user) 
+    onFetchedUser(user);
     if (location.href.includes('topics/'))
     {
         const splitted = location.href.split('topics/')
@@ -11,7 +20,37 @@ function main()
     document.querySelector('#login-container form').addEventListener('submit', loginEvent)
     document.querySelector('#apply-container #submit-apply').addEventListener('click', topicApplyEvent)
 }
+async function onFetchedUser(user)
+{
+    console.log(user)
+    const loginTitle = document.querySelector('#login-title');
+    const profileButton = document.querySelector('#profile-trigger');
+    profileButton.classList.add('active');
+    loginTitle.classList.remove('active');
 
+}
+async function fetchUser()
+{
+    const sessionID = getCookie('authKey');
+    const socket = window.socket;
+    if (!sessionID) return;
+    const getUserData = new Promise((resolve, reject) =>
+    {
+        socket.on('successful fetch by key', ({resUser}) =>
+        {
+            resolve(resUser);
+        })
+        socket.on('failed fetch by key', ({reason}) =>
+        {
+            reject(reason);
+        })
+        setTimeout(() => {
+            reject("Timeout")
+        }, 30000);
+        socket.emit('fetch by key', {sessionID})
+    })
+    return getUserData;
+} 
 function loadTopic(topicID)
 {
     window.socket.on('topic fetch success', async ({topic}) =>
@@ -95,7 +134,7 @@ async function loginEvent(event)
         return; 
     }
     setCookie('authKey', JsonResult.authKey);
-    alert("Успешно выполнен вход. Ваш ключ: " + JsonResult.authKey);
+    location.replace(location.origin);
 }   
 async function topicApplyEvent(event)
 {

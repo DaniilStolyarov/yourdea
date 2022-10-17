@@ -41,12 +41,7 @@ async function validLogin(logData)
         const foundUser = (await db.getUserByEmail(email)).rows[0]
         if (!foundUser) return {valid : false, reason : "пользователь с данным email не найден"};
         if (foundUser.password != password) return {valid : false, reason: "неверный пароль!"};
-        const currentConnection = (await db.getAuthKey(foundUser["user_id"])).rows[0];
-        if (currentConnection && currentConnection.session)
-        {
-            db.alterConnection(currentConnection.session);
-        }   
-        else db.createConnection(foundUser["user_id"]);
+        await db.upsertConnection(foundUser.user_id);
         const authKey = (await db.getAuthKey(foundUser["user_id"])).rows[0].session
         return {valid : true, authKey} 
     }

@@ -57,7 +57,7 @@ async function createConnectionsTable()
 {
     await client.query(`create table connections
     (
-        USER_ID BIGINT,
+        USER_ID BIGINT UNIQUE,
         SESSION UUID UNIQUE          
     )`)
 }
@@ -122,17 +122,17 @@ async function getUserByEmail(email)
 {
     return client.query('select * from users where email = $1::text', [email]);
 }
-async function createConnection(user_id)
+async function getUserBySession(key)
 {
-    return client.query('insert into connections (user_id, session) values($1::bigint, uuid_generate_v4())', [user_id]);
+    return client.query('select * from users where user_id = (select user_id from connections where session = $1::uuid)', [key])
 }
 async function getAuthKey(user_id)
 {
     return client.query('select * from connections where user_id = $1::bigint', [user_id])
 }
-async function alterConnection(session)
+async function upsertConnection(user_id)
 {
-    return client.query('update connections set session = uuid_generate_v4() where session = $1::uuid', [session])
+    return client.query('insert into connections (user_id, session) values($1::bigint, uuid_generate_v4()) on conflict (user_id) do update set session = uuid_generate_v4()', [user_id]);
 }
 async function getLastGroup()
 {
@@ -141,5 +141,6 @@ async function getLastGroup()
 
 module.exports =
 {
-    getTopicById, getUserByEmail, addUser, addGroup, createConnection, getAuthKey, alterConnection, getLastGroup
+    getTopicById, getUserByEmail, addUser, getUserBySession, addGroup, getAuthKey, upsertConnection, getLastGroup
 }
+

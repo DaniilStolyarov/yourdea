@@ -3,6 +3,26 @@ function handleEvents(io)
 {
     io.on('connection', (socket) =>
     {
+        socket.on('fetch by key', async ({sessionID}) =>
+        {
+            let user;
+            try
+            {
+                user = (await db.getUserBySession(sessionID)).rows[0];
+            }
+            catch (err)
+            {
+                socket.emit('failed fetch by key', {reason : "invalid sessionID"});
+                return;
+            }
+            if (!user) 
+            {
+                socket.emit('failed fetch by key', {reason : "invalid sessionID"});
+                return;
+            }
+            const resUser = {nickname : user.nickname, user_description : user.user_description, admin : user.admin, timestamp : user.timestamp}
+            socket.emit('successful fetch by key', {resUser});
+        })
         socket.on('topic fetch', async ({topicID}) =>
         {
             try 
