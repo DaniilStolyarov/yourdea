@@ -1,4 +1,5 @@
 // смена отображаемых страниц в зависимости от введённого url
+let hideBlock; 
 function togglePage(pageContainer, display = "block")
 {
     const mainContainer = document.querySelector("#main-container");
@@ -8,9 +9,13 @@ function togglePage(pageContainer, display = "block")
         page.style.display = "none";
     })
     pageContainer.style.display = display;
+    setTimeout(() => {
+        hideBlock.classList.remove('active');
+    }, 600);
 }
 document.addEventListener("DOMContentLoaded", () =>
 {
+    hideBlock = document.querySelector("#hide-all");
     toggleMainContainer();
     document.querySelectorAll('a').forEach(elem =>
         {
@@ -27,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () =>
 function toggleMainContainer(path = location.pathname, isPopstate = false)
 {
     const topicDisplay = document.querySelector('.topic-container').style.display;
-
+    hideBlock.classList.add('active');
     switch (path)
     {
         case '/register':

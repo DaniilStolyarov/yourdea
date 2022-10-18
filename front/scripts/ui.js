@@ -76,7 +76,68 @@ async function putEditorOnApplyPage()
                 }
             }
         },
-        toolbar : ['link, bold, italic']
+        i18n :
+        {
+            messages : 
+            {
+                ui: {
+                    "blockTunes": {
+                      "toggler": {
+                        "Click to tune": "Нажмите, чтобы настроить",
+                        "or drag to move": "или перетащите"
+                      },
+                    },
+                    "inlineToolbar": {
+                      "converter": {
+                        "Convert to": "Назначить"
+                      }
+                    },
+                    "toolbar": {
+                      "toolbox": {
+                        "Add": "Добавить"
+                      }
+                    }
+                  },
+                toolNames: {
+                    "Text": "Параграф",
+                    "Heading": "Заголовок",
+                    "List": "Список",
+                    "Warning": "Примечание",
+                    "Checklist": "Чеклист",
+                    "Quote": "Цитата",
+                    "Code": "Код",
+                    "Delimiter": "Разделитель",
+                    "Raw HTML": "HTML-фрагмент",
+                    "Table": "Таблица",
+                    "Link": "Ссылка",
+                    "Marker": "Маркер",
+                    "Bold": "Полужирный",
+                    "Italic": "Курсив",
+                    "InlineCode": "Моноширинный",
+                    "Image" : "Картинка",
+            
+                  },
+                  tools :
+                  {
+                    "link": {
+                        "Add a link": "Вставьте ссылку"
+                      },
+                      "warning": { // <-- 'Warning' tool will accept this dictionary section
+                        "Title": "Название",
+                        "Message": "Сообщение"
+                        
+                      },
+                      /**
+                       * The "stub" is an internal block tool, used to fit blocks that does not have the corresponded plugin
+                       */
+                      "stub": {
+                        'The block can not be displayed correctly.': 'Блок не может быть отображен',
+                      }
+                  }
+
+                
+            }
+        }
     })
     await editor.isReady; 
     window.editor = editor
