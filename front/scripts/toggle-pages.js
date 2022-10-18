@@ -22,11 +22,12 @@ document.addEventListener("DOMContentLoaded", () =>
                 toggleMainContainer('/' + path);
             })
         })
+    
 })
-function toggleMainContainer(path = location.pathname)
+function toggleMainContainer(path = location.pathname, isPopstate = false)
 {
     const topicDisplay = document.querySelector('.topic-container').style.display;
-    console.log(path)
+
     switch (path)
     {
         case '/register':
@@ -38,9 +39,21 @@ function toggleMainContainer(path = location.pathname)
         case '/apply':
             togglePage(document.querySelector('#apply-container'));
             break;
+        case '/profile':
+            togglePage(document.querySelector('#profile-container'))
+            break;
         default:
             togglePage(document.querySelector('.topic-container'), 'flex');
             break;
     }
-    window.history.pushState({}, '', path)
+    if (!isPopstate)
+    {
+        window.history.pushState({path}, '', path)
+    }
+    console.log(window.history)
 }
+window.addEventListener('popstate', (event) =>
+{
+    console.log(event.target.history.state)
+    toggleMainContainer(event.target.history.state.path, true)
+})

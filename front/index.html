@@ -46,10 +46,9 @@
                 <a id="login-title" class="active" href="/login">
                     <div class="text">Вход</div>    
                 </a>
-                <button id="profile-trigger" onclick="document.querySelector('#profile-menu').classList.toggle('active');" >
-                </button>
+                <a id="profile-trigger" href="/profile">
+                </a>
             </section>
-            <div id="profile-menu" class=""></div>
         </nav>
         <main id="main-container">
             <div class="topic-container">
@@ -156,6 +155,25 @@
                 <input type="text" maxlength="64" id="apply-title" placeholder="Заголовок">
                 <div id="apply-form"></div>
                 <button type="button" id="submit-apply">Oпубликовать</button>
+            </div>
+            <div id="profile-container">
+                <div id="profile">
+                    <section class="general">
+                        <div class="avatar"></div>
+                        <div class="email">youremail@mail.ru</div>
+                        <hr>
+                        <div class="name">Your Name</div>
+                        <hr>
+                        <div class="telegram"><div class="telegram-logo"></div> <div class="telegram-text">Danissimo_2548</div></div>
+                        <hr>
+                        <div class="phone_number">+79876735381</div>
+                        <hr>
+                        <button id ="logout">Выйти</button>
+                    </section>
+                    <section class="stats-container" >
+
+                    </section>
+                </div>
             </div>
         </main>
     </body>

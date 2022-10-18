@@ -19,14 +19,31 @@ async function main()
     document.querySelector('#sign-container form').addEventListener('submit', registerEvent)
     document.querySelector('#login-container form').addEventListener('submit', loginEvent)
     document.querySelector('#apply-container #submit-apply').addEventListener('click', topicApplyEvent)
+    document.querySelector('#profile-container #logout').addEventListener('click', logoutEvent)
+}
+async function logoutEvent(event)
+{ // удаляем authKey
+    deleteCookie('authKey');
+    location.replace(location.origin)
 }
 async function onFetchedUser(user)
 {
     console.log(user)
     const loginTitle = document.querySelector('#login-title');
     const profileButton = document.querySelector('#profile-trigger');
+    const nameDOM = document.querySelector('#profile-container .name');
+    const emailDOM = document.querySelector('#profile-container .email');
+    const avatarDOM = document.querySelector('#profile-container .avatar');
+    const telegramDOM = document.querySelector('#profile-container .telegram-text')
+    const phoneDOM = document.querySelector('#profile-container .phone_number')
+
     profileButton.classList.add('active');
     loginTitle.classList.remove('active');
+    
+    nameDOM.textContent = user.nickname;
+    emailDOM.textContent = user.email;
+    telegramDOM.textContent = user.telegram;
+    phoneDOM.textContent = user.phone;
 
 }
 async function fetchUser()

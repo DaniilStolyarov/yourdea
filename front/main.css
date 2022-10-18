@@ -1,6 +1,7 @@
 @import url('./pages/topic.css');
 @import url('./pages/sign.css');
 @import url('./pages/apply.css');
+@import url('./pages/profile.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap');
 *
 {
@@ -58,7 +59,7 @@ html, body
 
     overflow-y: visible;
 }
-button#profile-trigger.active
+#profile-trigger.active
 {
     display: block;
     width: 40px;
@@ -70,11 +71,11 @@ button#profile-trigger.active
     background: var(--color60);
     overflow: hidden;
 }
-button#profile-trigger
+#profile-trigger
 {
     display: none;
 }
-button#profile-trigger::before
+#profile-trigger::before
 {
     position: absolute;
     content: "";    
@@ -85,7 +86,7 @@ button#profile-trigger::before
     left: calc(50% - 45%/2);
     border-radius: 999px;
 }
-button#profile-trigger::after
+#profile-trigger::after
 {
     position: absolute;
     content: "";
@@ -96,27 +97,9 @@ button#profile-trigger::after
     left: calc(50% - 75%/2);
     border-radius: 999px;
 }
-button#profile-trigger:disabled
+#profile-trigger:disabled
 {
     display: none;
-}
-div#profile-menu
-{
-    position: absolute;
-    display: none;
-
-}
-div#profile-menu.active
-{
-    display: block;
-    background-color: white;
-    height: 400px;
-    width: 300px;
-    right: 0;
-    top: 50px;
-    box-shadow: -1px 1px 3px white;
-    border-radius: 0 0 0 20px;
-    z-index: 10;
 }
 #main-title 
 {

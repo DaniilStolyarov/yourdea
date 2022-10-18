@@ -20,7 +20,7 @@ function handleEvents(io)
                 socket.emit('failed fetch by key', {reason : "invalid sessionID"});
                 return;
             }
-            const resUser = {nickname : user.nickname, user_description : user.user_description, admin : user.admin, timestamp : user.timestamp}
+            const resUser = {nickname : user.nickname, user_description : user.user_description, admin : user.admin, timestamp : user.timestamp, email : user.email, phone: user.phone_number, telegram: user.telegram}
             socket.emit('successful fetch by key', {resUser});
         })
         socket.on('topic fetch', async ({topicID}) =>
