@@ -28,33 +28,41 @@ function handleEvents(io)
             try 
             {
                 const topic = (await db.getTopicById(topicID)).rows[0];
+                const authorID = topic.author_id;
+                const {nickname} = (await db.getUserById(authorID)).rows[0];
+                delete topic.author_id;
+                topic.author = nickname;
                 socket.emit('topic fetch success', ({topic}))
             }
             catch (err)
             {
+                console.log(err)
                 socket.emit('topic fecth failed', {errorMessage : err.message});
             }
         })
-        socket.on('topic apply', async ({topicDescription, topicTitle}) =>
+        socket.on('topic apply', async ({topicDescription, topicTitle, authKey}) =>
         {
+            if (!authKey) return;
             if ((typeof topicDescription) != "string" || (typeof topicTitle) != "string")
             {
                 return
             }
             try
-            {
+            {   
                 JSON.parse(topicDescription)
+                const {user_id} = (await db.getUserBySession(authKey)).rows[0];
+                db.addGroup(topicTitle, topicDescription, user_id).catch(err =>
+                    {
+                        socket.emit('failed topic apply')
+                    })
+                const id = (await db.getLastGroup()).rows[0].group_id;
+                socket.emit('successful topic apply',  {id})
             }
             catch (err) 
             {
                 console.log(err)
+                return;
             }
-            db.addGroup(topicTitle, topicDescription).catch(err =>
-                {
-                    socket.emit('failed topic apply')
-                })
-            const id = (await db.getLastGroup()).rows[0].group_id;
-            socket.emit('successful topic apply',  {id})
         })
     })
 }

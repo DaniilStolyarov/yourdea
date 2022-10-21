@@ -79,3 +79,10 @@
     background-color: red;
 
 }
+@media screen and (max-device-aspect-ratio : 21 / 18)
+{
+    #profile-container .general
+    {
+        width: 100%;
+    }
+}

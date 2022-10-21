@@ -93,7 +93,7 @@ async function addUser({email, admin = false, password, name, phoneNum, telegram
         $1::text, $2::boolean, $3::timestamp without time zone, $4::text, $5::text, $6::text, $7::text, $8::text
     )`, [email, admin, new Date (Date.now()).toLocaleString(), password, name, phoneNum, telegram, description])
 }
-async function addGroup(title, content)
+async function addGroup(title, content, author_id)
 {
     try
     {
@@ -101,13 +101,15 @@ async function addGroup(title, content)
         (
             TIMESTAMP,
             NAME,
-            DESCRIPTION      
+            DESCRIPTION,
+            AUTHOR_ID      
         ) values
         (
             $1::TIMESTAMP WITHOUT TIME ZONE,
             $2::text,
-            $3::text
-        )`, [new Date (Date.now()).toLocaleString(), title, content])
+            $3::text,
+            $4::bigint
+        )`, [new Date (Date.now()).toLocaleString(), title, content, author_id])
     }
     catch(err)
     {
@@ -118,6 +120,10 @@ async function getTopicById(id)
 {
     return client.query('select * from groups where group_id = $1::bigint', [id]);
 }
+async function getUserById(id)
+{
+    return client.query('select nickname from users where user_id = $1::bigint', [id]);
+}
 async function getUserByEmail(email)
 {
     return client.query('select * from users where email = $1::text', [email]);
@@ -125,6 +131,7 @@ async function getUserByEmail(email)
 async function getUserBySession(key)
 {
     return client.query('select * from users where user_id = (select user_id from connections where session = $1::uuid)', [key])
+        .catch(err => console.log(err))
 }
 async function getAuthKey(user_id)
 {
@@ -141,6 +148,6 @@ async function getLastGroup()
 
 module.exports =
 {
-    getTopicById, getUserByEmail, addUser, getUserBySession, addGroup, getAuthKey, upsertConnection, getLastGroup
+    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, upsertConnection, getLastGroup
 }
 

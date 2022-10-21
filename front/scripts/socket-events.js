@@ -72,11 +72,18 @@ function loadTopic(topicID)
 {
     window.socket.on('topic fetch success', async ({topic}) =>
     {
+        console.log(topic)
         const title = (topic.name.length > 0 ? topic.name : "Идея, которой не нужно имя")
+        const author = topic.author;
+        const timestamp = topic.timestamp;
+        let dateStamp = new Date(timestamp);
+
         if ({topic})
         {
             document.querySelector('.topic-container .title').textContent = title;
             document.querySelector('.topic-container .description .text').id = topic.group_id;
+            document.querySelector('.topic-container .info .author-info div').textContent = author;
+            document.querySelector('.topic-container .info .date-info div').textContent = `${dateStamp.getDate()}.${dateStamp.getMonth() + 1}.${dateStamp.getFullYear()}`
             const editor = new EditorJS({
                 readOnly : true,
                 data : JSON.parse(topic.description),
@@ -156,6 +163,7 @@ async function loginEvent(event)
 async function topicApplyEvent(event)
 {
     const socket = window.socket;
+    const authKey = getCookie('authKey')
     socket.on('successful topic apply', ({id}) =>
     {
         window.location.pathname = '/topics/' + id;
@@ -163,6 +171,6 @@ async function topicApplyEvent(event)
     const JSONdata = await window.editor.save();
     const topicDescription = JSON.stringify(JSONdata);
     const topicTitle = document.querySelector('#apply-title').value
-    socket.emit('topic apply', {topicDescription, topicTitle});
+    socket.emit('topic apply', {topicDescription, topicTitle, authKey});
 
 }
