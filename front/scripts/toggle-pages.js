@@ -55,7 +55,6 @@ function toggleMainContainer(path = location.pathname, isPopstate = false)
     {
         window.history.pushState({path}, '', path)
     }
-    console.log(window.history)
 }
 window.addEventListener('popstate', (event) =>
 {

@@ -21,18 +21,16 @@ async function main()
                 if (ev.key == 'Enter') ev.preventDefault();
             })
         })
-    putEditorOnApplyPage();
+    initEditors();
 }
 function getId(input)
 {
     console.log(input)
 }
-async function putEditorOnApplyPage()
+async function initEditors()
 {
-    const editor = new EditorJS
-    ({
-        holder: "apply-form",
-        placeholder : "Опишите свою идею",
+    const editorOptions = {
+        logLevel: 'ERROR',
         tools :
         {
             header : {
@@ -134,11 +132,18 @@ async function putEditorOnApplyPage()
                         'The block can not be displayed correctly.': 'Блок не может быть отображен',
                       }
                   }
-
-                
             }
         }
-    })
-    await editor.isReady; 
-    window.editor = editor
+    }
+    const optionsApplyEditor = {};
+    Object.assign(optionsApplyEditor, editorOptions, {holder: "apply-form", placeholder : "Опишите свою идею"})
+    const applyEditor = new EditorJS(optionsApplyEditor);
+    await applyEditor.isReady; 
+    window.applyEditor = applyEditor;
+
+    const optionsCommentEditor = {};
+    Object.assign(optionsCommentEditor, editorOptions, {holder: "myComment", placeholder : "Предложите своё развитие идеи"})
+    const commentEditor = new EditorJS(optionsCommentEditor);
+    await commentEditor.isReady;
+    window.commentEditor = commentEditor;
 }   

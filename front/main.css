@@ -17,8 +17,6 @@
     --color30: rgb(255, 196, 0);
     --color10:white;
     --slight: rgb(26, 28, 36);
-
-    overflow: hidden;
 }
 ::selection
 {

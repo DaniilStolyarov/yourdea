@@ -76,7 +76,7 @@ async function selectFrom(tableName) // не используется вне э�
 {
     return await client.query(`select * from ${tableName.toString()}`);
 }
-async function addUser({email, admin = false, password, name, phoneNum, telegram, description = "empty"})
+async function addUser({email, admin = false, password, name, phoneNum, telegram, description = "empty", avatar_id})
 {
     return await client.query(`insert into users 
     (   
@@ -87,11 +87,12 @@ async function addUser({email, admin = false, password, name, phoneNum, telegram
         NICKNAME,
         PHONE_NUMBER,
         TELEGRAM,
-        USER_DESCRIPTION  
+        USER_DESCRIPTION,
+        AVATAR_ID
     ) values
     (
-        $1::text, $2::boolean, $3::timestamp without time zone, $4::text, $5::text, $6::text, $7::text, $8::text
-    )`, [email, admin, new Date (Date.now()).toLocaleString(), password, name, phoneNum, telegram, description])
+        $1::text, $2::boolean, $3::timestamp without time zone, $4::text, $5::text, $6::text, $7::text, $8::text, $9::text
+    )`, [email, admin, new Date (Date.now()).toLocaleString(), password, name, phoneNum, telegram, description, avatar_id])
 }
 async function addGroup(title, content, author_id)
 {
@@ -116,13 +117,29 @@ async function addGroup(title, content, author_id)
         console.log(err)
     }
 }
+async function addMessage(author_id, group_id, content)
+{
+    return client.query(`insert into messages
+    (
+        AUTHOR_ID,
+        CONTENT,
+        TIMESTAMP,
+        GROUP_ID
+    ) values
+    (
+        $1::bigint,
+        $2::text,
+        $3::TIMESTAMP WITHOUT TIME ZONE,
+        $4::bigint
+    )`, [author_id, content, new Date (Date.now()).toLocaleString(), group_id])
+}
 async function getTopicById(id)
 {
     return client.query('select * from groups where group_id = $1::bigint', [id]);
 }
 async function getUserById(id)
 {
-    return client.query('select nickname from users where user_id = $1::bigint', [id]);
+    return client.query('select * from users where user_id = $1::bigint', [id]);
 }
 async function getUserByEmail(email)
 {
@@ -145,9 +162,12 @@ async function getLastGroup()
 {
     return client.query('SELECT * FROM GROUPS ORDER BY group_id DESC LIMIT 1');
 }
-
+async function getMessagesByTopicId(group_id)
+{
+    return client.query('SELECT * FROM MESSAGES WHERE GROUP_ID = $1::BIGINT', [group_id])
+}
 module.exports =
 {
-    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, upsertConnection, getLastGroup
+    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, upsertConnection, getLastGroup, addMessage, getMessagesByTopicId
 }
 

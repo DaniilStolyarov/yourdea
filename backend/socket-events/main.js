@@ -3,6 +3,47 @@ function handleEvents(io)
 {
     io.on('connection', (socket) =>
     {
+        socket.on('fetch user', async ({id}) =>
+        {
+            try
+            {
+                const user = (await db.getUserById(id)).rows[0];
+                const res = {avatar_id : user.avatar_id, nickname : user.nickname}
+                socket.emit('success fetch user', res)
+            } catch (err)
+            {
+                console.log(err)
+            }
+        })
+        socket.on('comments fetch', async ({topicID}) =>
+        {
+            try
+            {
+                const messages = (await db.getMessagesByTopicId(topicID)).rows
+                socket.emit('comments fetch success', {comments : messages});
+            }
+            catch (err)
+            {
+                console.log(err)
+            }
+            return;
+        })
+        socket.on('comment apply', async ({content, topicID, authKey}) =>
+        {
+            try
+            {
+                const user = (await db.getUserBySession(authKey)).rows[0];
+                const topic = (await db.getTopicById(topicID)).rows[0];
+                if (user && topic)
+                {
+                    await db.addMessage(user.user_id, topic.group_id, content);
+                }
+            }
+            catch (err)
+            {
+                console.log(err)
+            }
+        })
         socket.on('fetch by key', async ({sessionID}) =>
         {
             let user;
@@ -16,11 +57,13 @@ function handleEvents(io)
                 return;
             }
             if (!user) 
-            {
+            {   
                 socket.emit('failed fetch by key', {reason : "invalid sessionID"});
                 return;
             }
-            const resUser = {nickname : user.nickname, user_description : user.user_description, admin : user.admin, timestamp : user.timestamp, email : user.email, phone: user.phone_number, telegram: user.telegram}
+            const resUser = {nickname : user.nickname, user_description : user.user_description, admin : user.admin, 
+                timestamp : user.timestamp, email : user.email, phone: user.phone_number, telegram: user.telegram, 
+                avatar_id : user.avatar_id}
             socket.emit('successful fetch by key', {resUser});
         })
         socket.on('topic fetch', async ({topicID}) =>

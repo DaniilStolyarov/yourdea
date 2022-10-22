@@ -38,15 +38,24 @@ app.get('/images/*', (req, res, next) =>
 })
 app.post('/register', formidable(), async (req, res) =>
 {
-    const {email, name, password, telegram, phone} = req.fields;
+    const {email, name, password, telegram, phone} = req.fields;    
     const passwordConfirm = req.fields["password-confirm"];
     const avatar = req.files.avatar;
     const result = await validRegister({email, name, password, telegram, phone, passwordConfirm, avatar});
-    res.send(result);
     if (result.valid)
-    {
-        await db.addUser({email, password, name, phoneNum : phone, telegram});
+    {   
+        const randomId = v4();
+        let resAvatarPath = 'none';
+        if (avatar.name)
+        {
+            const path = [randomId.slice(0, 2), randomId.slice(2, 4), randomId + '.' + avatar.name.split('.').at(-1)]
+            fs.mkdirSync('./backend/images/' + path.slice(0, 2).join('/'), {recursive : true}, (err) => console.log(err))
+            fs.writeFileSync(`./backend/images/${path.join('/')}`, fs.readFileSync(avatar.path))
+            resAvatarPath = path.join('/');
+        }
+        await db.addUser({email, password, name, phoneNum : phone, telegram, avatar_id : resAvatarPath});
     }
+    res.send(result);
 })
 app.post('/login', formidable(), async (req,res) =>
 {
