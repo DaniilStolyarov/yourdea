@@ -124,9 +124,9 @@ async function fetchUser()
 } 
 function loadComments(topicID)
 {
-    window.socket.on('comments fetch success', ({comments}) =>
+    window.socket.on('comments fetch success', async ({comments}) =>
     {
-        comments.forEach(async (comment) =>
+        for (const comment of comments)
             {
                 const {author_id, content} = comment;
                 const commentPromise = new Promise((resolve, reject) =>
@@ -160,10 +160,7 @@ function loadComments(topicID)
                 const commentEditorOptions = {}
                 Object.assign(commentEditorOptions, editorDefaults, {data : JSON.parse(content), holder : "message-" + comment.message_id})
                 const commentEditor = new EditorJS(commentEditorOptions);
-                await commentEditor.isReady;
-
-                
-            })
+            }
   
     })
     window.socket.emit('comments fetch', {topicID})
