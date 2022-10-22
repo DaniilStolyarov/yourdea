@@ -162,6 +162,7 @@ function loadComments(topicID)
                 const commentEditor = new EditorJS(commentEditorOptions);
                 await commentEditor.isReady;
 
+                
             })
   
     })
@@ -193,6 +194,9 @@ function loadTopic(topicID)
             location.href = '/'
         }
         window.currentTopicID = topic.group_id;
+        const descriptionDOM = document.querySelector('.topic .description');
+        const titleDOM = document.querySelector('.topic .title');
+        descriptionDOM.style.height = `calc(100% - ${titleDOM.clientHeight}px)`
         loadComments(topicID);
     })
     window.socket.emit('topic fetch', {topicID});
