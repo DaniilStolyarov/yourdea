@@ -38,6 +38,7 @@ app.get('/images/*', (req, res, next) =>
 })
 app.post('/register', formidable(), async (req, res) =>
 {
+    console.log(req)
     const {email, name, password, telegram, phone} = req.fields;
     const passwordConfirm = req.fields["password-confirm"];
     const avatar = req.files.avatar;
