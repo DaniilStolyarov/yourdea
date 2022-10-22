@@ -29,7 +29,6 @@ async function validRegister(user)
     }
     catch(err)
     {
-        console.log(err)
         return {valid : false, reason : "Неизвестная ошибка"}
     }
     return {valid : true}    
