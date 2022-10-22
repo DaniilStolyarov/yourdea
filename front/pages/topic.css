@@ -1,16 +1,14 @@
 .topic-container
 {
     display: block;
-
-
-    
+    border-radius: 5px;
     margin: 20px 40px;
     height: calc(100% - 40px);
 }
 
 .topic-container .topic
 {
-    width: 60%;
+    width: 55%;
 }
 .topic .title
 {
@@ -19,16 +17,15 @@
     color: var(--color60);
     font-size: 20px;
     font-weight: 600;
-    margin: 20px 0 0;
     padding: 4px 16px;
 
 }
 .topic .description
 {
-    height: calc(100% - 98px);
+    height: calc(100% - 28px);
     margin: 0 0 20px 0;
     background: var(--slight);
-    border-radius: 0 20px 0 20px;
+
     overflow: auto;
 }
 .topic .info
@@ -37,7 +34,7 @@
     display: flex;
     flex-direction: row;
     justify-content: left;
-    background-color: var(--color60);
+    background-color: rgba(255, 255, 255, 0.053);
 }
 .topic .info section
 {
@@ -50,8 +47,8 @@
     display: block;
     margin-top: 8px;
     color: var(--color10);
-    opacity: 0.9;
-    font-weight: 100;
+    font-weight: 300;
+    
 }
 .topic .info section div div
 {
@@ -75,7 +72,7 @@
     content: "";
     width: 45%;
     height: 45%;
-    background-color: var(--color30);
+    background-color: var(--color10);
     top: 8px;
     left: calc(50% - 45%/2);
     border-radius: 999px;
@@ -86,7 +83,7 @@
     content: "";
     width: 75%;
     height: 75%;
-    background-color: var(--color30);
+    background-color: var(--color10);
     top: 65%;
     left: calc(50% - 75%/2);
     border-radius: 999px;
@@ -97,7 +94,7 @@
     width: 35px;
     height: 35px;
     margin: 10px;
-    border-top: 6px solid var(--color30);
+    border-top: 6px solid var(--color10);
     border-radius: 5px;
     position: relative;
     background: var(--slight);
@@ -111,7 +108,7 @@
     content: "";
     width: 5px;
     height: 8px;
-    background-color: var(--color30);
+    background-color: var(--color10);
     border-radius: 30px;
 }
 .topic .info .date-icon::after
@@ -128,101 +125,6 @@
     font-size: 16px;
     font-weight: 400;
 }
-.topic-container .chat
-{
-    margin: 20px;
-    width: 40%;
-    position: relative;
-}
-.chat .view
-{
-    background-color: var(--slight);
-    border-radius: 20px 20px 0 0;
-    border-bottom: none;
-    min-height: 50%;
-    height: 90%;
-}
-
-.chat .panel
-{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: fit-content;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: var(--color60);
-    padding-top: 10px;
-}
-.panel .send
-{
-    background-color: var(--color60);
-    width: 0; 
-    height: 0;
-    border-top: 13px solid transparent;
-    border-left: 30px solid var(--color30);
-    border-bottom: 13px solid transparent;
-    margin: 11px auto 0; 
-    max-height: 100%;
-    cursor: pointer;
-}
-.panel .textarea
-{
-    width: 85%;
-
-    color: var(--color30);
-    background-color: var(--slight);
-    border-radius: 20px;
-    padding: 7px 13px;
-    margin: 7.5px;
-}
-.panel .textarea *
-{
-    color: var(--color30);
-}
-.view
-{
-    border-top: 1px solid transparent;
-    overflow-y: auto;
-}
-.view .message
-{
-    border-top: 1px solid transparent;
-    width: 80%;
-    height: fit-content;
-    margin: 40px auto;
-    padding: 20px 65px;
-    background-color: var(--slight);
-    cursor: pointer;
-    position: relative;
-}
-.view .message:hover
-{
-    background-color: var(--color60);
-}
-.view .avatar
-{
-    width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    background-color: var(--slight);
-    background-image: url("/images/icons/android-icon-72x72.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    position: absolute;
-    left: 10px;
-}
-.view .author
-{
-    color: var(--color30);
-    font-weight: 600;
-}
-.view .content
-{
-    color: white;
-}
 .codex-editor__redactor
 {
     margin: 0 !important;
@@ -233,6 +135,22 @@
     color: var(--color30);
     font-weight: 600;
     text-decoration: none;
+}
+.comments
+{
+    background-color: var(--slight);
+    width: 42.5%;
+    height: 100%;
+    margin: 0 0 0 2.5%;
+}
+.comments header
+{
+    color: var(--color60);
+    display: block;
+    padding: 4px 16px;
+    font-size: 20px;
+    background-color: var(--color10);
+    font-weight: 600;
 }
 @media screen and (max-device-aspect-ratio : 21 / 18) {
 
@@ -274,7 +192,7 @@
         height: fit-content;
         margin: 15px;
     }
-    #main-container .chat
+    #main-container .comments
     {
         display: none;
 
