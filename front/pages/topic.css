@@ -306,7 +306,7 @@
     {
         border-radius: 0;
         margin: 0;
-        height: calc(100% - 35.5px - 50px);
+        height: calc(100% - 37px - 45px);
         border: 1px solid transparent;
     }
     #main-container .text
