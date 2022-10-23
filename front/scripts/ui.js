@@ -21,6 +21,33 @@ async function main()
                 if (ev.key == 'Enter') ev.preventDefault();
             })
         })
+    document.querySelector('.toggle-comments-container').addEventListener('click', () =>
+    {
+        const topic = document.querySelector('.topic-container .topic');
+        const comments = document.querySelector('.topic-container .comments');
+        const view = comments.querySelector('.view');
+        const commentsDOM = view.children;
+        topic.style.display = 'none';
+        comments.style.display = 'block';
+        for (const commentDOM of commentsDOM)
+        {
+            if (!commentDOM.classList.contains('comment-container')) continue;
+            const contentDOM = commentDOM.querySelector('.comment-content');
+            if (contentDOM.clientHeight > commentDOM.clientHeight)
+            {
+                const id = contentDOM.id.split('-').at(-1);
+                const showFullButton = comments.querySelector('#button-' + id);
+                showFullButton.style.display = "block";
+            }
+        }
+    })
+    document.querySelector('.disable-comments-container').addEventListener('click', () =>
+    {
+        const topic = document.querySelector('.topic-container .topic');
+        const comments = document.querySelector('.topic-container .comments');
+        topic.style.display = "block";
+        comments.style.display = "none";
+    })
     initEditors();
 }
 function getId(input)

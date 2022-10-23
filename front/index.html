@@ -78,6 +78,7 @@
                         <div class="text">
                         </div>
                     </div>
+                    <button class="toggle-comments-container">Обсуждение</button>
                 </div>
                 <div class="comments">
                     <header>Обсуждение</header>
@@ -85,9 +86,11 @@
                     </div>
                     <div class="create-comment">
                         <div class="comment-content" id="myComment"></div>
-                        <button class="comment-submit">Предложить идею</button>
+                       
                     </div>
+                    <button class="comment-submit">Отправить</button>
                     <button class="toggle-view-comments" onclick="toggleCommentsView()">Предложить решение</button>
+                    <button class="disable-comments-container">Назад</button>
                 </div>
             </div>
             <div id="sign-container">
@@ -151,11 +154,19 @@
                                 const view = document.querySelector('.comments .view')
                                 view.classList.toggle('active');
                                 const button = document.querySelector('.toggle-view-comments');
+                                const submit = document.querySelector('.comments .comment-submit');
+            
                                 document.querySelector('.comments .create-comment').classList.toggle('active');
                                 if (view.classList.contains('active'))
+                                {
                                     button.textContent = "Предложить решение"
+                                    submit.classList.remove('active');
+                                }
                                 else
+                                {
+                                    submit.classList.add('active');
                                     button.textContent = "Назад"
+                                }
                             }
                         </script>
                     </div>

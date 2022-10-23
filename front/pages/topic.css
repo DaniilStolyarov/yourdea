@@ -23,11 +23,16 @@
 .topic .description
 {
     height: calc(100% - 28px);
-    margin: 0 0 20px 0;
+    margin: 0 0 0 0;
     background: var(--slight);
 
     overflow: auto;
 }
+.topic .toggle-comments-container
+{
+    display: none;
+}
+
 .topic .info
 {
     color: var(--color10);
@@ -124,6 +129,7 @@
     text-align: left;
     font-size: 16px;
     font-weight: 400;
+
 }
 .codex-editor
 {
@@ -151,6 +157,7 @@
     width: 42.5%;
     height: 100%;
     margin: 0 0 0 2.5%;
+    overflow: hidden;
 }
 .comments header
 {
@@ -165,13 +172,15 @@
 {
     display: none;
     border-top: 1px solid transparent;
-    overflow: auto;
+ 
 }
 .comments .view.active
 {
     display: block;
-    height: calc(100% - 32px - 50px);
+    height: calc(100% - 32px - 50px - 55px);
     background-color: var(--slight);
+    flex-direction: column-reverse;
+    overflow: auto;
 }
 
 .toggle-view-comments
@@ -194,18 +203,23 @@
 .create-comment.active 
 {
     border-top: 1px solid transparent;
-    height: calc(100% - 32px - 50px);
+    height: calc(100% - 32px - 50px - 50px - 5px);
     display: block;
     background-color: var(--slight);
+    overflow: auto;
 }
 .create-comment .comment-content
 {
-    height: calc(90% - 20px);
+    height: 100%;
     width: 80%;
-    margin: 10px auto;
+    margin: 0 auto;
 
 }
-.create-comment .comment-submit
+.comments .comment-submit
+{
+    display: none;
+}
+.comments .comment-submit.active
 {
     font-size: 18px;
     height: 50px;
@@ -214,14 +228,15 @@
     border-radius: 5px;
     background-color: var(--color30);
     cursor: pointer;
+    margin-bottom: 5px;
 }
-.comment-container
+.view .comment-container
 {
     display: flex;
     color: var(--color10);
-    margin: 20px 10px;
-    max-height: 300px;
-    overflow: auto;
+    margin: 20px 10px 0;
+    max-height: 500px;
+    overflow: hidden;
 }
 .content-group
 {
@@ -242,6 +257,21 @@
     color: var(--color30);
     font-weight: 500;
 }
+
+.view .show-full-comment
+{
+    background-color: var(--slight);
+    color: var(--color30);
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 5px;
+    margin-left: calc(8% + 20px);
+    margin-bottom: 30px;
+}
+.disable-comments-container
+{
+    display: none;
+}
 @media screen and (max-device-aspect-ratio : 21 / 18) {
 
     *
@@ -258,9 +288,11 @@
         width: 100%;
         margin: 0;
         overflow: visible;
+        height: 100%;
     }
     #main-container .topic
     {
+        display: block;
         width: 100%;
         margin: 0;      
         height: 100%;
@@ -274,7 +306,7 @@
     {
         border-radius: 0;
         margin: 0;
-        height: calc(100% - 35.5px);
+        height: calc(100% - 35.5px - 50px);
         border: 1px solid transparent;
     }
     #main-container .text
@@ -296,5 +328,33 @@
     {
         display: none;
     }
-
+    .topic .toggle-comments-container
+    {
+        display: block;
+        width: 100%;
+        height: 50px;
+        color: var(--color10);
+        background-color: var(--color60);
+        border: 3px solid var(--color10);
+        font-size: 18px;
+        font-weight: 500;
+        border-radius: 5px;
+    }
+    .topic-container .comments
+    {
+        width: 100%;
+        margin: 0;
+    }
+    .disable-comments-container
+    {
+        display: block;
+        width: 100%;
+        height: 50px;
+        margin-top: 5px;
+        background-color: var(--color60);
+        border: 3px solid var(--color10);
+        border-radius: 5px;
+        color: var(--color10);
+        font-size: 18px;
+    }
 }

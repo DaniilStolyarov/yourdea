@@ -71,8 +71,14 @@ async function commentSubmitEvent(event)
     const data = await window.commentEditor.save();
     const stringData = JSON.stringify(data);
     const topicID = window.currentTopicID; // ID загруженного на странице topic
-    window.socket.emit('comment apply', {content : stringData, topicID, authKey});
-    location.reload();
+    if (data.blocks.length != 0)
+    {
+        window.socket.emit('comment apply', {content : stringData, topicID, authKey});
+        location.reload();
+    }
+    else
+    alert('Пустой комментарий!')
+
 }
 async function logoutEvent(event)
 { // удаляем authKey
@@ -126,6 +132,7 @@ function loadComments(topicID)
 {
     window.socket.on('comments fetch success', async ({comments}) =>
     {
+        comments.reverse();
         for (const comment of comments)
             {
                 const {author_id, content} = comment;
@@ -143,6 +150,7 @@ function loadComments(topicID)
                 const {avatar_id, nickname} = await commentPromise;
                 const commentContainerDOM = document.createElement('div');
                     commentContainerDOM.classList.add('comment-container');
+                    commentContainerDOM.id = "comment-" + comment.message_id;
                 const commentAvatarDOM = document.createElement('div');
                     commentAvatarDOM.classList.add('comment-avatar');
                     commentAvatarDOM.style["background-image"] = `url(/images/${avatar_id})`;
@@ -154,13 +162,29 @@ function loadComments(topicID)
                 const commentContent = document.createElement('div');
                     commentContent.classList.add('comment-content');
                     commentContent.id = "message-" + comment.message_id;
+                const showFullButton = document.createElement('button');
+                    showFullButton.classList.add('show-full-comment');
+                    showFullButton.textContent = "Показать полностью..."
+                    showFullButton.id = "button-" + comment.message_id;
                 contentGroup.append(commentNickname, commentContent);
                 commentContainerDOM.append(commentAvatarDOM, contentGroup);
-                document.querySelector('.comments .view').append(commentContainerDOM);
+                document.querySelector('.comments .view').append(commentContainerDOM, showFullButton);
                 const commentEditorOptions = {}
                 Object.assign(commentEditorOptions, editorDefaults, {data : JSON.parse(content), holder : "message-" + comment.message_id})
                 const commentEditor = new EditorJS(commentEditorOptions);
-            }
+                showFullButton.onclick = () =>
+                {
+                    commentContainerDOM.style.maxHeight = "none";
+                    showFullButton.style.display = "none";
+                }
+                commentEditor.isReady.then(() =>
+                {
+                    if (commentContent.scrollHeight < 500)
+                    {
+                        showFullButton.style.display = "none";
+                    }
+                })
+             }
   
     })
     window.socket.emit('comments fetch', {topicID})
@@ -193,7 +217,7 @@ function loadTopic(topicID)
         window.currentTopicID = topic.group_id;
         const descriptionDOM = document.querySelector('.topic .description');
         const titleDOM = document.querySelector('.topic .title');
-        descriptionDOM.style.height = `calc(100% - ${titleDOM.clientHeight}px)`
+        descriptionDOM.style.height = `calc(100% - 50px - ${titleDOM.clientHeight}px)`
         loadComments(topicID);
     })
     window.socket.emit('topic fetch', {topicID});
