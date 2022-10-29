@@ -219,5 +219,12 @@ module.exports =
 }
 if (process.argv[2] == 'initAll')
 {
-    initDatabase();
+    client.query('drop table users, connections, groups, groupmembers, messages').then(() =>
+    {
+        client.query('drop extension "uuid-ossp"').then(() =>
+        {
+            initDatabase();
+
+        })
+    })
 }
