@@ -92,7 +92,34 @@ app.post('/upload-image-url', formidable(), async (req, res) =>
     }
     res.send(answer)
 })
+app.post('/update-user-data', formidable(), async (req, res) =>
+{
+    try
+    {
+        const userInfo = req.fields;
+        for (prop in userInfo)
+        {
+            if (typeof userInfo[prop] !== 'string')
+            {
+                res.send('Неизвестная ошибка')
+                throw new Error('ОШЫБКА')
+            }
+        }
+        if (!userInfo.authKey) return;
+        const id = (await db.getUserBySession(userInfo.authKey)).rows[0].user_id;
+        userInfo.id = id;
+        const result = await db.updateUserInfo(userInfo);
 
+        
+    } catch (err)
+    {
+        console.log(err);
+        res.send({ok : false});
+        return;
+    }
+    res.status(200);
+    res.send({ok : true});
+})
 server.listen(443, () =>
 {
     console.log('listening on ' + 443);

@@ -49,6 +49,7 @@ async function main()
         comments.style.display = "none";
     })
     initEditors();
+    useSelect();
 }
 function getId(input)
 {
@@ -174,3 +175,31 @@ async function initEditors()
     await commentEditor.isReady;
     window.commentEditor = commentEditor;
 }   
+async function useSelect()
+{
+    const countrySelect = document.querySelector('#country-options');
+    const citizenshipSelect = document.querySelector('#gr-options');
+    const citySelect = document.querySelector('#city-options')
+    const countryJSON = await fetch('/countries.json');
+    const countries = await countryJSON.json();
+    for (country in countries)
+    {
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+        const optionCopy = option.cloneNode(true)
+        countrySelect.append(option)
+        citizenshipSelect.append(optionCopy);
+    }
+    countrySelect.addEventListener('change', (event) =>
+    {
+        const cities = countries[countrySelect.value]
+        cities.forEach(city =>
+            {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.append(option)
+            })
+    })
+}

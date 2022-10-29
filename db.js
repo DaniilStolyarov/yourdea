@@ -8,6 +8,10 @@ async function insertUser(user)
 {
     const {email, password, name, timestamp} = user;       
 }   
+async function createExtension()
+{
+    await client.query(`create extension "uuid-ossp"`)
+}
 async function createUsersTable() // не используется вне этого файла
 {
     await client.query(`create table users
@@ -20,7 +24,24 @@ async function createUsersTable() // не используется вне это
         NICKNAME TEXT,
         PHONE_NUMBER TEXT,
         TELEGRAM TEXT,
-        USER_DESCRIPTION TEXT
+        USER_DESCRIPTION TEXT,
+        AVATAR_ID TEXT,
+        NAME TEXT,
+        SURNAME TEXT,
+        PATRONYMIC TEXT,
+        BIRTHDATE DATE,
+        COUNTRY TEXT,
+        CITY TEXT,
+        CITIZENSHIP TEXT,
+        SEX TEXT,
+        HEE TEXT,
+        HEE_SPECIALITY TEXT,
+        HEE_GRADUATION TEXT,
+        OCCUPATION_STATUS TEXT,
+        EXPERIENCE TEXT,
+        PATENT TEXT,
+        COMPANY_OWNER TEXT,
+        INN TEXT
     )`)
 }
 async function createGroupsTable() // не используется вне этого файла
@@ -30,7 +51,8 @@ async function createGroupsTable() // не используется вне эт�
         GROUP_ID BIGSERIAL PRIMARY KEY,
         TIMESTAMP TIMESTAMP WITHOUT TIME ZONE,
         NAME TEXT UNIQUE,
-        DESCRIPTION TEXT        
+        DESCRIPTION TEXT,
+        AUTHOR_ID BIGINT            
     )`)
 }
 async function createGroupMembersTable() // не используется вне этого файла
@@ -69,7 +91,8 @@ async function initDatabase() // не используется вне этого
             createGroupsTable(),
             createGroupMembersTable(), 
             createMessagesTable(),
-            createConnectionsTable()
+            createConnectionsTable(),
+            createExtension()
         ]);
 }
 async function selectFrom(tableName) // не используется вне этого файла
@@ -166,8 +189,35 @@ async function getMessagesByTopicId(group_id)
 {
     return client.query('SELECT * FROM MESSAGES WHERE GROUP_ID = $1::BIGINT', [group_id])
 }
+async function updateUserInfo(userInfo)
+{
+    return client.query(`UPDATE USERS SET 
+    NAME = $1::TEXT,
+    SURNAME = $2::TEXT,
+    PATRONYMIC = $3::TEXT,
+    BIRTHDATE = $4::DATE,
+    COUNTRY = $5::TEXT,
+    CITY = $6::TEXT,
+    SEX = $7::TEXT,
+    HEE = $8::TEXT,
+    HEE_SPECIALITY = $9::TEXT,
+    HEE_GRADUATION = $10::TEXT,
+    OCCUPATION_STATUS = $11::TEXT,
+    EXPERIENCE = $12::TEXT,
+    PATENT = $13::TEXT,
+    COMPANY_OWNER = $14::TEXT,
+    INN = $15::TEXT,
+    USER_DESCRIPTION = $16::TEXT,
+    CITIZENSHIP = $17::TEXT
+    WHERE USER_ID = $18::BIGINT`
+    , [userInfo.name, userInfo.surname, userInfo.patronymic, userInfo.birthdate, userInfo.country, userInfo.city, userInfo.sex, userInfo.hee, userInfo.speciality, userInfo.graduation, 
+        userInfo.occupation, userInfo.experience, userInfo.patent, userInfo.company, userInfo.inn, userInfo.description, userInfo.citizenship, +userInfo.id])
+}
 module.exports =
 {
-    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, upsertConnection, getLastGroup, addMessage, getMessagesByTopicId
+    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, updateUserInfo, upsertConnection, getLastGroup, addMessage, getMessagesByTopicId
 }
-
+if (process.argv[2] == 'initAll')
+{
+    initDatabase();
+}

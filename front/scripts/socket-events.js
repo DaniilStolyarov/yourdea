@@ -64,6 +64,24 @@ async function main()
     document.querySelector('#apply-container #submit-apply').addEventListener('click', topicApplyEvent)
     document.querySelector('#profile-container #logout').addEventListener('click', logoutEvent)
     document.querySelector('.topic-container .comment-submit').addEventListener('click', commentSubmitEvent)
+    document.querySelector('form.user-info').addEventListener('submit', updateUserInfo)
+}
+async function updateUserInfo(event)
+{
+    event.preventDefault();
+    if (!confirm('Сохранить?')) return;
+    const formData = new FormData(document.querySelector('form.user-info'))
+    formData.append('authKey', getCookie('authKey'));
+    const result = await fetch('/update-user-data', {method : "POST", body : formData})
+    const resJson = await result.json();
+    if (!resJson.ok) 
+    {
+        alert('что-то пошло не так. Проверьте правильность введённых данных')
+        console.log(resJson);
+        return;
+        
+    }   
+    location.reload();
 }
 async function commentSubmitEvent(event)
 {
@@ -87,7 +105,6 @@ async function logoutEvent(event)
 }
 async function onFetchedUser(user)
 {
-    console.log(user)
     const loginTitle = document.querySelector('#login-title');
     const profileButton = document.querySelector('#profile-trigger');
     const nameDOM = document.querySelector('#profile-container .name');
@@ -96,6 +113,7 @@ async function onFetchedUser(user)
     const telegramDOM = document.querySelector('#profile-container .telegram-text')
     const phoneDOM = document.querySelector('#profile-container .phone_number')
 
+    console.log(user)
     profileButton.classList.add('active');
     loginTitle.classList.remove('active');
     
@@ -104,7 +122,23 @@ async function onFetchedUser(user)
     telegramDOM.textContent = user.telegram;
     phoneDOM.textContent = user.phone;
     avatarDOM.style["background-image"] = `url(/images/${user.avatar_id})`
+    const propForm = document.querySelector('form.user-info');
+    propForm.querySelectorAll('input, select').forEach(elem =>
+        {
+            const elemName = elem.name;
+            if (elemName in user)
+            {   
+                elem.value = user[elemName];
 
+            }
+
+            if (elemName == "country")
+            {
+                const changeEv = new Event("change");
+                elem.dispatchEvent(changeEv);  
+            } 
+        })
+    document.querySelector('textarea[name = "description"').value = user.description;
 }
 async function fetchUser()
 {
@@ -185,6 +219,22 @@ function loadComments(topicID)
                     }
                 })
              }
+             if (comments.length < 1)
+             {
+                const icon = document.createElement('div');
+                const emptyBlock = document.createElement('div');
+                emptyBlock.style.width = "fit-content";
+                emptyBlock.style.color = "var(--color10)";
+                emptyBlock.style.margin = "20px auto 0";
+                emptyBlock.innerHTML = "<i>Пока нет комментариев...</i>";
+                const view = document.querySelector('.view.active');
+                icon.style.height = "100px";
+                icon.style["background"] = `url(/images/icons/empty_light.png) no-repeat center`;
+                icon.style.backgroundSize = "contain";
+                icon.style.marginTop = "100px";
+                view.append(icon)
+                view.append(emptyBlock)
+             }
   
     })
     window.socket.emit('comments fetch', {topicID})
@@ -234,6 +284,7 @@ async function registerEvent(event)
         alert(JsonResult.reason);
         return;
     }
+    alert('Регистрация успешна. Теперь попробуйте войти')
 }
 async function loginEvent(event)
 {
