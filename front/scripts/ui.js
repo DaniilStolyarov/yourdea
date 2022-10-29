@@ -194,6 +194,7 @@ async function useSelect()
     countrySelect.addEventListener('change', (event) =>
     {
         const cities = countries[countrySelect.value]
+        if (cities)
         cities.forEach(city =>
             {
                 const option = document.createElement('option');

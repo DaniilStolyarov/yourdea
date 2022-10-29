@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () =>
                 toggleMainContainer('/' + path);
             })
         })
-    
 })
 function toggleMainContainer(path = location.pathname, isPopstate = false)
 {
@@ -48,7 +47,8 @@ function toggleMainContainer(path = location.pathname, isPopstate = false)
             togglePage(document.querySelector('#profile-container'))
             break;
         default:
-            togglePage(document.querySelector('.topic-container'), 'flex');
+            if (path.includes('topics')) togglePage(document.querySelector('.topic-container'), 'flex');
+            else togglePage(document.querySelector('#feed-container'))
             break;
     }
     if (!isPopstate)

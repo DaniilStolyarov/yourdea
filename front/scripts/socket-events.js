@@ -65,6 +65,32 @@ async function main()
     document.querySelector('#profile-container #logout').addEventListener('click', logoutEvent)
     document.querySelector('.topic-container .comment-submit').addEventListener('click', commentSubmitEvent)
     document.querySelector('form.user-info').addEventListener('submit', updateUserInfo)
+    fetchTopics();
+}
+async function fetchTopics()
+{
+    window.socket.on('successful fetch topics list', (list) =>
+    {
+        list.forEach(elem =>
+            {
+                const container = document.createElement('div');
+                    container.classList.add('feed-element');
+                const title = document.createElement('a');
+                    title.textContent = elem.name;
+                    title.classList.add('feed-title');
+                    title.href = "/topics/" + elem.group_id;
+                const authorNick = document.createElement('div');
+                    // todo : определять данные автора по его list.id
+                const feedGroup = document.createElement('div');
+                    feedGroup.classList.add('feed-group');
+                const avatar = document.createElement('div');
+                    avatar.classList.add('feed-avatar')
+                feedGroup.append(title, authorNick);
+                container.append(avatar, feedGroup);
+                document.querySelector('.feed-list').append(container)
+            })  
+    }) 
+    window.socket.emit('fetch topics list')
 }
 async function updateUserInfo(event)
 {

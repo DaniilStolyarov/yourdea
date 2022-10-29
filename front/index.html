@@ -55,6 +55,12 @@
             </section>
         </nav>
         <main id="main-container">
+            <div id="feed-container">
+                <nav class="search"></nav>
+                <section class="feed-list">
+                    <header>Недавно добавленные</header>
+                </section>
+            </div>
             <div class="topic-container">
                 <div class="topic">
                     <div class="title">Lorem Ipsum</div>
@@ -197,17 +203,18 @@
             </div>
             <div id="profile-container">
                 <div id="profile">
-                    <section class="general">
+                    <section class="general active">
                         <div class="avatar"></div>
                         <div class="email">youremail@mail.ru</div>
                         <hr>
                         <div class="name">Your Name</div>
                         <hr>
-                        <div class="telegram"><div class="telegram-logo"></div> <div class="telegram-text">Danissimo_2548</div></div>
+                        <div class="telegram"><div class="telegram-logo"></div> <div class="telegram-text"></div></div>
                         <hr>
-                        <div class="phone_number">+79876735381</div>
+                        <div class="phone_number"></div>
                         <hr>
                         <button id ="logout">Выйти</button>
+                        <button type="button" class="toggleInfo" onclick="toggleProfile()">Перейти к личным данным</button>
                     </section>
                     <form class="user-info">
                         <div class="input-group">
@@ -299,6 +306,13 @@
                         <footer></footer>
                     </form>
                 </div>
+                <script>
+                    function toggleProfile()
+                    {
+                        document.querySelector('#profile .general').classList.toggle('active');
+                        document.querySelector('#profile .user-info').classList.toggle('active');
+                    }
+                </script>
             </div>
         </main>
     </body>

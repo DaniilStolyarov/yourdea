@@ -3,6 +3,11 @@ function handleEvents(io)
 {
     io.on('connection', (socket) =>
     {
+        socket.on('fetch topics list', async () =>
+        {
+            const list = (await db.getLastTopics()).rows;
+            socket.emit('successful fetch topics list', list);
+        })
         socket.on('fetch user', async ({id}) =>
         {
             try

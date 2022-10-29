@@ -145,10 +145,44 @@
     padding: 5px;
     cursor: pointer;
 }
+#profile-container .toggleInfo
+{
+    display: none;
+}
 @media screen and (max-device-aspect-ratio : 21 / 18)
 {
     #profile-container .general
     {
         width: 100%;
+        display: none;
+    }
+    #profile-container .general.active
+    {
+        display: block;
+    }
+
+    #profile-container .user-info
+    {
+        display: none;
+        width: 100%;
+    }
+    #profile-container .user-info.active 
+    {
+        display: flex;
+    }
+    #profile-container .toggleInfo
+    {
+        display: block;
+        
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        font-size: 18px;
+        font-weight: 500;
+        padding: 10px;
+        color: var(--color30);
+        background-color: var(--slight);
+        border: 2px solid var(--color30);
     }
 }

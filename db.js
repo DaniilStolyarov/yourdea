@@ -160,6 +160,10 @@ async function getTopicById(id)
 {
     return client.query('select * from groups where group_id = $1::bigint', [id]);
 }
+async function getLastTopics()
+{
+    return client.query('select * from groups')
+}
 async function getUserById(id)
 {
     return client.query('select * from users where user_id = $1::bigint', [id]);
@@ -215,7 +219,8 @@ async function updateUserInfo(userInfo)
 }
 module.exports =
 {
-    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, updateUserInfo, upsertConnection, getLastGroup, addMessage, getMessagesByTopicId
+    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, updateUserInfo, upsertConnection, getLastGroup, 
+    addMessage, getMessagesByTopicId, getLastTopics
 }
 if (process.argv[2] == 'initAll')
 {
@@ -224,7 +229,6 @@ if (process.argv[2] == 'initAll')
         client.query('drop extension "uuid-ossp"').then(() =>
         {
             initDatabase();
-
         })
     })
 }
