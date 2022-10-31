@@ -224,7 +224,7 @@ module.exports =
 }
 if (process.argv[2] == 'initAll')
 {
-    client.query('drop table users, connections, groups, groupmembers, messages').then(() =>
+    client.query('drop table users, connections, groups, groupmembers, messages').finally(() =>
     {
         client.query('drop extension "uuid-ossp"').then(() =>
         {
