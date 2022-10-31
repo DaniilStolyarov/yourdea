@@ -107,9 +107,16 @@ html, body
     border-radius: 999px;
     position: relative;
     background: var(--color60);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     overflow: hidden;
 }
 #profile-trigger
+{
+    display: none;
+}
+#profile-trigger.disabled::before, #profile-trigger.disabled::after
 {
     display: none;
 }

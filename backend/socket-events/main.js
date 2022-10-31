@@ -88,9 +88,9 @@ function handleEvents(io)
             {
                 const topic = (await db.getTopicById(topicID)).rows[0];
                 const authorID = topic.author_id;
-                const {nickname} = (await db.getUserById(authorID)).rows[0];
+                const {nickname, avatar_id} = (await db.getUserById(authorID)).rows[0];
                 delete topic.author_id;
-                topic.author = nickname;
+                topic.author = {nickname, avatar_id};
                 socket.emit('topic fetch success', ({topic}))
             }
             catch (err)

@@ -37,9 +37,12 @@
     font-size: 20px;
     background-color: var(--color30);
     font-weight: 600;
-    text-transform: capitalize;
     padding: 5px 10px;
     width: 100%;
+}
+#apply-title::selection
+{
+    background-color: var(--color10);
 }
 #apply-title::placeholder
 {

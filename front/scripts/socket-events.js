@@ -136,6 +136,7 @@ async function onFetchedUser(user)
     const nameDOM = document.querySelector('#profile-container .name');
     const emailDOM = document.querySelector('#profile-container .email');
     const avatarDOM = document.querySelector('#profile-container .avatar');
+    const userIconDOM = document.querySelector('#profile-trigger');
     const telegramDOM = document.querySelector('#profile-container .telegram-text')
     const phoneDOM = document.querySelector('#profile-container .phone_number')
 
@@ -148,6 +149,8 @@ async function onFetchedUser(user)
     telegramDOM.textContent = user.telegram;
     phoneDOM.textContent = user.phone;
     avatarDOM.style["background-image"] = `url(/images/${user.avatar_id})`
+    userIconDOM.style["background-image"] = `url(/images/${user.avatar_id})`
+    userIconDOM.classList.add('disabled')
     const propForm = document.querySelector('form.user-info');
     propForm.querySelectorAll('input, select').forEach(elem =>
         {
@@ -279,8 +282,11 @@ function loadTopic(topicID)
         {
             document.querySelector('.topic-container .title').textContent = title;
             document.querySelector('.topic-container .description .text').id = topic.group_id;
-            document.querySelector('.topic-container .info .author-info div').textContent = author;
+            document.querySelector('.topic-container .info .author-info div').textContent = author.nickname;
             document.querySelector('.topic-container .info .date-info div').textContent = `${dateStamp.getDate()}.${dateStamp.getMonth() + 1}.${dateStamp.getFullYear()}`
+            const authorAvatarDOM = document.querySelector('.topic-container .author-icon');
+            authorAvatarDOM.style["background-image"]= `url(/images/${author.avatar_id})`
+            authorAvatarDOM.classList.add('disabled')
             const editorOptions = {};
             Object.assign(editorOptions, editorDefaults, {data : JSON.parse(topic.description), holder : topic.group_id})
             const editor = new EditorJS(editorOptions)

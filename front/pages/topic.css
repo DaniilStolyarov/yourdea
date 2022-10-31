@@ -69,7 +69,14 @@
     border-radius: 999px;
     position: relative;
     background: var(--slight);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     overflow: hidden;
+}
+.topic .info .author-icon.disabled::after, .topic .info .author-icon.disabled::before
+{
+    display: none;
 }
 .topic .info .author-icon::before
 {
