@@ -224,11 +224,15 @@ module.exports =
 }
 if (process.argv[2] == 'initAll')
 {
-    client.query('drop table if exists users, connections, groups, groupmembers, messages').finally(() =>
+    client.query('drop table users, connections, groups, groupmembers, messages').finally(() =>
     {
-        client.query('drop extension "uuid-ossp" if exists').then(() =>
+        client.query('drop extension "uuid-ossp"').then(() =>
         {
             initDatabase();
         })
     })
+}
+else if (process.argv[2] == 'startAll')
+{
+    initDatabase();
 }
