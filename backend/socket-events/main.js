@@ -1,8 +1,30 @@
 const db = require('../../db');
+const stringSimilarity = require('string-similarity')
+const maxSearchCount = 10;
 function handleEvents(io)
 {
     io.on('connection', (socket) =>
     {
+        socket.on('search topic', async ({value}) =>
+        {
+            if (typeof value != 'string') return;
+            const groups = (await db.getTopicTitles()).rows;
+            let tempCS;
+            const res = [];
+            let minRate = 0.15;
+            
+            for (let i = 0; i < groups.length; i++)
+            {
+                
+                tempCS = stringSimilarity.compareTwoStrings(value.toLowerCase(), groups[i].name.toLowerCase());
+                if (tempCS < minRate) continue;
+                groups[i].rate = tempCS;
+                res.push(groups[i]);
+                if(res.length > maxSearchCount) minRate = tempCS;
+            }
+            socket.emit('successful search topic', res)
+        
+        })
         socket.on('fetch topics list', async () =>
         {
             const list = (await db.getLastTopics()).rows;

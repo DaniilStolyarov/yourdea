@@ -65,7 +65,118 @@ async function main()
     document.querySelector('#profile-container #logout').addEventListener('click', logoutEvent)
     document.querySelector('.topic-container .comment-submit').addEventListener('click', commentSubmitEvent)
     document.querySelector('form.user-info').addEventListener('submit', updateUserInfo)
+    document.querySelector('#feed-container .search-group button').addEventListener('click', searchTopic)
     fetchTopics();
+}
+async function searchTopic()
+{
+    const searchInputDOM = document.querySelector('.search-group input');
+    const feedHeader = document.querySelector('.feed-list header')
+    const feedList = document.querySelector('.feed-list')
+    const value = searchInputDOM.value;
+    if (!value) return; 
+    const searchPromise = new Promise((resolve, reject) =>
+    {
+        socket.on('successful search topic', (searchResult) =>
+        {
+            resolve(searchResult);
+        })
+        socket.emit('search topic', {value});
+        setTimeout(() => {
+            reject('Долгий ответ')
+        }, 60000);
+    })
+    const result = await searchPromise;
+    const sortedResult = bubbleSort(result);
+
+    const fields = feedList.querySelectorAll('div');
+    fields.forEach((field) =>
+    {
+        field.remove();
+    })
+    
+    feedHeader.textContent = `По запросу ${value}:`
+
+
+    sortedResult.forEach(res =>
+        {
+            const container = document.createElement('div');
+                    container.classList.add('feed-element');
+                const title = document.createElement('a');
+                    title.textContent = res.name;
+                    title.classList.add('feed-title');
+                    title.href = "/topics/" + res.group_id;
+                const authorNick = document.createElement('div');
+                    // todo : определять данные автора по его list.id
+                const dateStamp = new Date(Date.parse(res.timestamp));
+                const timestampDOM = document.createElement('div');
+                    timestampDOM.classList.add('feed-timestamp')
+                    timestampDOM.textContent = `${dateStamp.getDate()}.${dateStamp.getMonth() + 1}.${dateStamp.getFullYear()}`;
+       
+                const feedGroup = document.createElement('div');
+                    feedGroup.classList.add('feed-group');
+                const avatar = document.createElement('div');
+                    avatar.classList.add('feed-avatar')
+                feedGroup.append(title, timestampDOM);
+                container.append(avatar, feedGroup);
+                document.querySelector('.feed-list').append(container)
+        })
+    if (sortedResult.length == 0) 
+    {
+        const container = document.createElement('div');
+        const icon = document.createElement('div');
+        const text = document.createElement('div');
+        const back = document.createElement('a');
+        back.style.display = 'block';
+        back.style.margin = '0 auto';
+        back.style.width = 'fit-content';
+        back.textContent = 'Назад';
+        back.href = '/';
+        back.style.fontSize = '18px';
+        back.style.border = '2px solid var(--color30)'
+        back.style.borderRadius = '5px'
+        back.style.textDecoration = 'none';
+        back.style.padding = '5px 10px'
+        back.style.color = 'var(--color30)';
+        text.textContent = "...ничего не найдено"
+        text.style.textAlign = "center";
+        text.style.fontSize = '18px';
+        text.style.marginBottom = '30px'
+        icon.style.backgroundImage = `url(/images/icons/empty_light.png)`
+        icon.style.backgroundSize = 'contain'
+        icon.style.width = '200px';
+        icon.style.height = '200px';
+        icon.style.margin = '0 auto';
+        container.style.width = 'fit-content'
+        container.style.margin = '50px auto';   
+        container.append(icon, text, back);
+        feedList.innerHTML = feedHeader.outerHTML + container.outerHTML;
+    }
+}
+function bubbleSort(list)
+{
+    function checkSorted(arr)
+    {
+        for (let i = 0; i < arr.length - 1; i++)
+        {
+            if (arr[i].rate < arr[i + 1].rate) return false;
+        }
+        return true;
+    }
+    let tempElem;
+    while (!checkSorted(list))
+    {
+        for (let i = 0; i < list.length - 1; i++)
+        {
+            if (list[i].rate < list[i + 1].rate)
+            {
+                tempElem = list[i];
+                list[i] = list[i + 1];
+                list[i + 1] = tempElem;
+            }
+        }
+    }
+    return list;
 }
 async function fetchTopics()
 {
@@ -81,11 +192,15 @@ async function fetchTopics()
                     title.href = "/topics/" + elem.group_id;
                 const authorNick = document.createElement('div');
                     // todo : определять данные автора по его list.id
+                const dateStamp = new Date(Date.parse(elem.timestamp));
+                const timestampDOM = document.createElement('div');
+                    timestampDOM.classList.add('feed-timestamp')
+                    timestampDOM.textContent = `${dateStamp.getDate()}.${dateStamp.getMonth() + 1}.${dateStamp.getFullYear()}`;
                 const feedGroup = document.createElement('div');
                     feedGroup.classList.add('feed-group');
                 const avatar = document.createElement('div');
                     avatar.classList.add('feed-avatar')
-                feedGroup.append(title, authorNick);
+                feedGroup.append(title, authorNick, timestampDOM);
                 container.append(avatar, feedGroup);
                 document.querySelector('.feed-list').append(container)
             })  
