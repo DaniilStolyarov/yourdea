@@ -5,6 +5,41 @@ function handleEvents(io)
 {
     io.on('connection', (socket) =>
     {
+        socket.on('fetch team', async (teamID) =>
+        {
+            try
+            {
+                const team = (await db.getTeamById(teamID)).rows;
+                const {name} = (await db.getTopicById(teamID)).rows[0];
+                for (member of team)
+                {
+                    member.role_prior = (await db.getRolePrior(teamID, member.user_id)).rows[0].role_prior;
+                }
+                socket.emit('successful fetch team', {team, name})
+            } 
+            catch(err)
+            {
+                console.log(err);
+            }
+        })
+        socket.on('team link', async ({authKey}) =>
+        {
+            try
+            {
+                const groups = (await db.getLeaderGroup(authKey)).rows;
+                if (groups.length == 0)
+                {
+                    socket.emit('failed team link', {reason : "Только лидер группы имеет доступ к ссылке-приглашению"})
+                    return
+                };
+               
+                const link = (await db.addGroupLink(groups[0].group_id)).rows[0].group_link;
+                socket.emit('successful team link', {url : `/jointeam/${link}`});
+            } catch(err)
+            {
+                console.log(err)
+            }
+        })
         socket.on('search topic', async ({value}) =>
         {
             if (typeof value != 'string') return;
@@ -132,15 +167,19 @@ function handleEvents(io)
             {   
                 JSON.parse(topicDescription)
                 const {user_id} = (await db.getUserBySession(authKey)).rows[0];
-                db.addGroup(topicTitle, topicDescription, user_id).catch(err =>
-                    {
-                        socket.emit('failed topic apply')
-                    })
-                const id = (await db.getLastGroup()).rows[0].group_id;
+                const userGroups = (await db.getLeaderGroup(user_id)).rows;
+                if (userGroups.length > 0) 
+                {
+                    socket.emit('failed topic apply', {reason : "Вы уже являетесь лидером группы"})
+                    return;
+                }
+                const {group_id : id} = (await db.addGroup(topicTitle, topicDescription, user_id)).rows[0];
+                await db.addGroupMember(id, authKey, 1); 
                 socket.emit('successful topic apply',  {id})
             }
             catch (err) 
             {
+                socket.emit('failed topic apply', {reason : "Неизвестная ошибка"})
                 console.log(err)
                 return;
             }

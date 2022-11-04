@@ -3,6 +3,7 @@
 @import url('./pages/apply.css');
 @import url('./pages/profile.css');
 @import url('./pages/feed.css');
+@import url('./pages/team.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap');
 *
 {
@@ -18,6 +19,11 @@
     --color30: rgb(255, 196, 0);
     --color10:white;
     --slight: rgb(26, 28, 36);
+  
+}
+a
+{
+    color: var(--color30);
 }
 ::selection
 {
@@ -28,6 +34,7 @@ html, body
 {
     height: 100%;
     scrollbar-width: thin;
+    overflow: hidden;
 }
 ::-webkit-scrollbar {
     width: 3px;
@@ -107,9 +114,10 @@ html, body
     border-radius: 999px;
     position: relative;
     background: var(--color60);
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+ 
     overflow: hidden;
 }
 #profile-trigger

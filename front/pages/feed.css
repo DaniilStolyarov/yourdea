@@ -101,3 +101,27 @@ input[type="search"]::-webkit-search-results-decoration {
     font-weight: 200;
     color: var(--color10);
 }
+@media screen and (max-device-aspect-ratio : 21 / 18)
+{
+    #feed-container nav.search
+    {
+        width: 100%;
+        flex-wrap: nowrap;
+        flex-direction: row;
+    }
+    #feed-container .search-group
+    {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    #feed-container .search-group input
+    {
+        width: 65%;
+    }
+    #feed-container .feed-list
+    {
+        margin: 0;
+        padding: 20px;
+    }
+}

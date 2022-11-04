@@ -48,6 +48,7 @@ function toggleMainContainer(path = location.pathname, isPopstate = false)
             break;
         default:
             if (path.includes('topics')) togglePage(document.querySelector('.topic-container'), 'flex');
+            else if (path.includes('teams')) togglePage(document.querySelector('#team-container'))
             else togglePage(document.querySelector('#feed-container'))
             break;
     }

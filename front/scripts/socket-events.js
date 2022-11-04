@@ -44,6 +44,7 @@ const editorDefaults = { // шаблон для настроек EditorJS
 window.addEventListener("DOMContentLoaded", main)
 async function main()
 {
+    document.querySelector('head title').textContent = 'МыслЯ'
     const userPromise = fetchUser()
         .catch(reason =>
         {
@@ -59,6 +60,11 @@ async function main()
         const splitted = location.href.split('topics/')
         loadTopic(splitted[splitted.length - 1])
     }
+    else if (location.href.includes('teams/'))
+    {
+        const splitted = location.href.split('teams/');
+        loadTeam(splitted[splitted.length - 1])
+    }
     document.querySelector('#sign-container form').addEventListener('submit', registerEvent)
     document.querySelector('#login-container form').addEventListener('submit', loginEvent)
     document.querySelector('#apply-container #submit-apply').addEventListener('click', topicApplyEvent)
@@ -66,7 +72,65 @@ async function main()
     document.querySelector('.topic-container .comment-submit').addEventListener('click', commentSubmitEvent)
     document.querySelector('form.user-info').addEventListener('submit', updateUserInfo)
     document.querySelector('#feed-container .search-group button').addEventListener('click', searchTopic)
+    document.querySelector('#team-container .team-link').addEventListener('click', getTeamLink)
     fetchTopics();
+}
+async function loadTeam(groupID)
+{
+    window.socket.on('successful fetch team', ({team, name}) =>
+    {
+        const memberList = document.querySelector('section.team-members');
+        const nameDOM = document.querySelector('#team-container .team header');
+            nameDOM.textContent = name;
+        for (member of team)
+        {
+            const memberDOM = document.createElement('div');
+                memberDOM.classList.add('team-member');
+            const avatar = document.createElement('div');
+                avatar.classList.add('team-member-avatar');
+                avatar.style.backgroundImage = `url(/images/${member.avatar_id})`
+            const nickname = document.createElement('div');
+                nickname.classList.add('team-member-nickname');
+                nickname.textContent = member.nickname;
+            const role = document.createElement('div');
+                role.classList.add('team-member-role');
+                role.textContent = member.role_prior ? 'Лидер' : 'Участник'
+            const container = document.createElement('div')
+                container.classList.add('team-member');
+            container.append(avatar, nickname, role)
+            memberList.append(container);
+        }
+    })
+    window.socket.emit('fetch team', groupID)
+}
+async function getTeamLink()
+{
+    const authKey = getCookie('authKey');
+    const link = new Promise((resolve, reject) =>
+    {
+        socket.on('successful team link', ({url}) =>
+        {
+            resolve(url);
+        })
+        socket.on('failed team link', ({reason}) =>
+        {
+            reject(reason);
+        })
+        setTimeout(() => {
+            reject('timeout')
+        }, 10000);
+        socket.emit('team link', {authKey})
+    })
+    try 
+    {
+        const resLink = location.origin + (await link);
+        await navigator.clipboard.writeText(resLink);
+        alert(`Ссылка скопирована в буфер обмена: ${resLink}`)
+    }
+    catch (err) 
+    {
+        alert(err);
+    }
 }
 async function searchTopic()
 {
@@ -395,10 +459,19 @@ function loadTopic(topicID)
 
         if ({topic})
         {
+            document.querySelector('head title').textContent = title + ' - Мысля'
             document.querySelector('.topic-container .title').textContent = title;
             document.querySelector('.topic-container .description .text').id = topic.group_id;
             document.querySelector('.topic-container .info .author-info div').textContent = author.nickname;
             document.querySelector('.topic-container .info .date-info div').textContent = `${dateStamp.getDate()}.${dateStamp.getMonth() + 1}.${dateStamp.getFullYear()}`
+            const teamLink = document.querySelector('.topic-container .info .team-info div')
+            teamLink.textContent = title;
+            teamLink.href = `/teams/${topic.group_id}`
+            teamLink.style.cursor = 'pointer';
+            teamLink.addEventListener('click', (event) =>
+            {
+                location.replace(teamLink.href)
+            })
             const authorAvatarDOM = document.querySelector('.topic-container .author-icon');
             authorAvatarDOM.style["background-image"]= `url(/images/${author.avatar_id})`
             authorAvatarDOM.classList.add('disabled')
@@ -454,6 +527,10 @@ async function topicApplyEvent(event)
     socket.on('successful topic apply', ({id}) =>
     {
         window.location.pathname = '/topics/' + id;
+    })
+    socket.on('failed topic apply', ({reason}) =>
+    {
+        alert(reason);
     })
     const JSONdata = await window.applyEditor.save();
     const topicDescription = JSON.stringify(JSONdata);

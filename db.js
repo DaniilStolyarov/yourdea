@@ -55,6 +55,14 @@ async function createGroupsTable() // не используется вне эт�
         AUTHOR_ID BIGINT            
     )`)
 }
+async function createGroupLinkTable()
+{
+    await client.query(`create table grouplinks
+    (
+        GROUP_ID BIGINT,
+        GROUP_LINK UUID UNIQUE
+    )`)
+}
 async function createGroupMembersTable() // не используется вне этого файла
 {
     await client.query(`create table groupmembers
@@ -90,6 +98,7 @@ async function initDatabase() // не используется вне этого
             createUsersTable(),
             createGroupsTable(),
             createGroupMembersTable(), 
+            createGroupLinkTable(),
             createMessagesTable(),
             createConnectionsTable(),
             createExtension()
@@ -133,12 +142,30 @@ async function addGroup(title, content, author_id)
             $2::text,
             $3::text,
             $4::bigint
-        )`, [new Date (Date.now()).toLocaleString(), title, content, author_id])
+        ) RETURNING GROUP_ID`, [new Date (Date.now()).toLocaleString(), title, content, author_id])
     }
     catch(err)
     {
         console.log(err)
     }
+}
+async function addGroupMember(group_id, key, rolePrior)
+{
+    return client.query(`insert into groupmembers 
+    (
+        group_id,
+        user_id,
+        role_prior
+    ) values
+    (
+        $1::BIGINT,
+        (select user_id from connections where session = $2::uuid),
+        $3::SMALLINT
+    )`, [group_id, key, rolePrior])  
+}
+async function getLeaderGroup(key)
+{
+    return client.query('select * from groups where author_id = (select user_id from connections where session = $1::uuid)', [key]);
 }
 async function addMessage(author_id, group_id, content)
 {
@@ -155,6 +182,27 @@ async function addMessage(author_id, group_id, content)
         $3::TIMESTAMP WITHOUT TIME ZONE,
         $4::bigint
     )`, [author_id, content, new Date (Date.now()).toLocaleString(), group_id])
+}
+async function addGroupLink(id)
+{
+    return client.query(`insert into grouplinks 
+    (
+        group_id,
+        group_link
+    ) values
+    (
+        $1::bigint,
+        uuid_generate_v4()
+    ) RETURNING group_link`, [id])
+}
+async function getTeamById(group_id) // team - все участники данной group
+{
+    return client.query(`select nickname, avatar_id, user_id from users where user_id = (select user_id from groupmembers 
+        where group_id = $1::bigint)`, [group_id])
+}
+async function getRolePrior(group_id, user_id)
+{
+    return client.query('select role_prior from groupmembers where group_id = $1::bigint and user_id = $2::bigint', [group_id, user_id]);
 }
 async function getTopicById(id)
 {
@@ -223,12 +271,12 @@ async function updateUserInfo(userInfo)
 }
 module.exports =
 {
-    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, getAuthKey, updateUserInfo, upsertConnection, getLastGroup, 
-    addMessage, getMessagesByTopicId, getLastTopics, getTopicTitles
+    getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, addGroupMember, addGroupLink, getTeamById, getLeaderGroup, getAuthKey, updateUserInfo, upsertConnection, getLastGroup, 
+    addMessage, getMessagesByTopicId, getLastTopics, getTopicTitles, getRolePrior
 }
 if (process.argv[2] == 'initAll')
 {
-    client.query('drop table users, connections, groups, groupmembers, messages').finally(() =>
+    client.query('drop table users, connections, groups, groupmembers, messages, groupLinks').finally(() =>
     {
         client.query('drop extension "uuid-ossp"').then(() =>
         {
