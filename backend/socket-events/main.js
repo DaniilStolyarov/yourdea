@@ -167,7 +167,7 @@ function handleEvents(io)
             {   
                 JSON.parse(topicDescription)
                 const {user_id} = (await db.getUserBySession(authKey)).rows[0];
-                const userGroups = (await db.getLeaderGroup(user_id)).rows;
+                const userGroups = (await db.getLeaderGroup(authKey)).rows;
                 if (userGroups.length > 0) 
                 {
                     socket.emit('failed topic apply', {reason : "Вы уже являетесь лидером группы"})
