@@ -82,6 +82,7 @@ async function loadTeam(groupID)
         const memberList = document.querySelector('section.team-members');
         const nameDOM = document.querySelector('#team-container .team header');
             nameDOM.textContent = name;
+        memberList.style.height = `calc(100% - 8px - 40px - ${document.querySelector('#team-container header').clientHeight}px)`
         for (member of team)
         {
             const memberDOM = document.createElement('div');

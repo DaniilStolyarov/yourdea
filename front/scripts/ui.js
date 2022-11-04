@@ -20,7 +20,8 @@ async function main()
             {
                 if (ev.key == 'Enter') ev.preventDefault();
             })
-        })
+        })  
+    
     document.querySelector('.toggle-comments-container').addEventListener('click', () =>
     {
         const topic = document.querySelector('.topic-container .topic');
