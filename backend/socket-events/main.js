@@ -5,6 +5,52 @@ function handleEvents(io)
 {
     io.on('connection', (socket) =>
     {
+        socket.on('info team', async (teamID) =>
+        {
+            try
+            {
+                const {author_id, name : title} = (await db.getGroupByLink(teamID)).rows[0];
+                const {nickname, avatar_id} = (await db.getUserById(author_id)).rows[0];
+                socket.emit('successful info team', {nickname, title, avatar_id})
+            } catch (err)
+            {
+                socket.emit('failed info team', {reason : "Некорректная ссылка"});
+                console.log(err)
+            }
+        })
+        socket.on('join team', async ({teamID, authKey}) =>
+        {
+            try 
+            {
+                const {group_id, author_id} = (await db.getGroupByLink(teamID)).rows[0];
+                const {user_id} = (await db.getUserBySession(authKey)).rows[0];
+                if (!user_id)
+                {
+                    socket.emit('failed join team', {reason : "Вы не залогинены"})
+                    return;
+                }
+                
+                const leaderGroups = (await db.getLeaderByGroupID(user_id)).rows // проверяем что участник не является лидером какой-либо команды
+                if (leaderGroups.length !== 0) 
+                {
+                    console.log(leaderGroups);
+                    socket.emit('failed join team', {reason : "Вы уже являетесь лидером идеи"})
+                    return;
+                }
+                const memberGroup = (await db.getGroupMemberByAuthorID(user_id)).rows;
+                if (memberGroup.length !== 0)
+                {
+                    socket.emit('failed join team', {reason : "Вы уже являетесь участником идеи"})
+                }
+                await db.addGroupMember(group_id, authKey, 0);
+                socket.emit('successful join team', group_id);
+            } catch (err)
+            {
+                socket.emit('failed join team', {reason : "Неизвестная ошибка"})
+                console.log(err);
+                return;
+            }
+        })
         socket.on('fetch team', async (teamID) =>
         {
             try
@@ -20,6 +66,7 @@ function handleEvents(io)
             catch(err)
             {
                 console.log(err);
+                return;
             }
         })
         socket.on('team link', async ({authKey}) =>

@@ -163,9 +163,17 @@ async function addGroupMember(group_id, key, rolePrior)
         $3::SMALLINT
     )`, [group_id, key, rolePrior])  
 }
+async function getGroupMemberByAuthorID(id)
+{
+    return client.query('select * from groupmembers where user_id = $1::bigint', [id]);
+}
 async function getLeaderGroup(key)
 {
     return client.query('select * from groups where author_id = (select user_id from connections where session = $1::uuid)', [key]);
+}
+async function getLeaderByGroupID(id)
+{
+    return client.query('select group_id from groups where author_id = $1::bigint', [id])
 }
 async function addMessage(author_id, group_id, content)
 {
@@ -195,9 +203,13 @@ async function addGroupLink(id)
         uuid_generate_v4()
     ) RETURNING group_link`, [id])
 }
+async function getGroupByLink(key)
+{
+    return client.query(`select name, author_id, group_id from groups where group_id = (select group_id from grouplinks where group_link = $1::uuid)`, [key]);
+}
 async function getTeamById(group_id) // team - все участники данной group
 {
-    return client.query(`select nickname, avatar_id, user_id from users where user_id = (select user_id from groupmembers 
+    return client.query(`select nickname, avatar_id, user_id from users where user_id = ANY(select user_id from groupmembers 
         where group_id = $1::bigint)`, [group_id])
 }
 async function getRolePrior(group_id, user_id)
@@ -272,7 +284,7 @@ async function updateUserInfo(userInfo)
 module.exports =
 {
     getTopicById, getUserByEmail, getUserById, addUser, getUserBySession, addGroup, addGroupMember, addGroupLink, getTeamById, getLeaderGroup, getAuthKey, updateUserInfo, upsertConnection, getLastGroup, 
-    addMessage, getMessagesByTopicId, getLastTopics, getTopicTitles, getRolePrior
+    addMessage, getMessagesByTopicId, getLastTopics, getTopicTitles, getRolePrior, getGroupByLink, getLeaderByGroupID, getGroupMemberByAuthorID
 }
 if (process.argv[2] == 'initAll')
 {

@@ -65,6 +65,12 @@ async function main()
         const splitted = location.href.split('teams/');
         loadTeam(splitted[splitted.length - 1])
     }
+    else if (location.href.includes('jointeam/'))
+    {
+        const splitted = location.href.split('jointeam/');
+        infoTeam(splitted[splitted.length - 1])
+        document.querySelector('#confirm-container .confirm-body button').addEventListener('click', joinTeam);
+    }
     document.querySelector('#sign-container form').addEventListener('submit', registerEvent)
     document.querySelector('#login-container form').addEventListener('submit', loginEvent)
     document.querySelector('#apply-container #submit-apply').addEventListener('click', topicApplyEvent)
@@ -73,7 +79,40 @@ async function main()
     document.querySelector('form.user-info').addEventListener('submit', updateUserInfo)
     document.querySelector('#feed-container .search-group button').addEventListener('click', searchTopic)
     document.querySelector('#team-container .team-link').addEventListener('click', getTeamLink)
+  
     fetchTopics();
+}
+async function joinTeam()
+{
+    window.socket.on('successful join team', (groupID) =>
+    {
+        location.replace('/teams/' + groupID)
+    })
+    window.socket.on('failed join team', ({reason}) => 
+    {
+        alert(reason);
+        console.log(reason);
+        location.replace('/');
+    })
+    const authKey = getCookie('authKey');
+    window.socket.emit('join team', {teamID :  location.href.split('jointeam/').at(-1), authKey})
+}
+async function infoTeam(teamID)
+{
+    if (!teamID) return;
+    window.socket.on('successful info team', ({title, nickname, avatar_id}) =>
+    {
+        document.querySelector('#confirm-container .confirm-body .confirm-nickname').textContent = nickname;
+        document.querySelector('#confirm-container .confirm-body .confirm-group-title').textContent = `"${title}"`;
+        document.querySelector('#confirm-container .confirm-body .confirm-avatar').style.backgroundImage = `url(/images/${avatar_id})`
+
+    })
+    window.socket.on('failed info team', ({reason}) =>
+    {
+        location.replace('/')
+    })
+    window.socket.emit('info team', teamID);
+
 }
 async function loadTeam(groupID)
 {
