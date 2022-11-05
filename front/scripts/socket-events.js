@@ -286,6 +286,9 @@ async function fetchTopics()
 {
     window.socket.on('successful fetch topics list', (list) =>
     {
+        const listDOM = document.querySelector('.feed-list');
+        const newHeader = listDOM.querySelector('header').cloneNode(true);
+        listDOM.querySelector('header').remove();
         list.forEach(elem =>
             {
                 const container = document.createElement('div');
@@ -306,8 +309,10 @@ async function fetchTopics()
                     avatar.classList.add('feed-avatar')
                 feedGroup.append(title, authorNick, timestampDOM);
                 container.append(avatar, feedGroup);
-                document.querySelector('.feed-list').append(container)
-            })  
+                listDOM.prepend(container)
+            }) 
+            console.log(newHeader)
+            listDOM.prepend(newHeader);
     }) 
     window.socket.emit('fetch topics list')
 }
